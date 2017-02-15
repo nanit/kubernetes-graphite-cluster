@@ -119,11 +119,18 @@ Optional Variables:
                          changes. The default is true. Set this to false to disable.
 */
 {
-  graphitePort: 2003
-, graphiteHost: "relay"
-, port: 8125
-, backends: [ "./backends/graphite" ]
-, debug: true
-, dumpMessages: true
+  servers: [ {server: "./servers/udp", port: 8125} ], 
+  backends: [ "./backends/graphite" ],
+  graphiteHost: "relay",
+  graphitePort: 2003,
+  flushInterval: 5000,
+  deleteIdleStats: true,
+  graphite:
+  {
+    legacyNamespace: false,
+    prefixCounter: "counters",
+    prefixTimer: "timers",
+    prefixGauge: "gauges"
+  }
 }
 

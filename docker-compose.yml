@@ -12,8 +12,6 @@ services:
     build: statsd
     links:
       - relay
-    expose:
-      - "8125/udp"
   statsd-2:
     build: statsd
     links:
