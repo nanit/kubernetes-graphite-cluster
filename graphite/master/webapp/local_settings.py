@@ -243,7 +243,6 @@ LOG_RENDERING_PERFORMANCE = True
 # remote server in the cluster. These servers must each have local access to
 # metric data. Note that the first server to return a match for a query will be
 # used.
-#CLUSTER_SERVERS = ["node-1:80", "node-2:80", "node-3:80"]
 CLUSTER_SERVERS = ["node-1:80", "node-2:80", "node-3:80"]
 
 # This settings control wether https is used to communicate between cluster members
