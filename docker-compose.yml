@@ -1,0 +1,46 @@
+version: "2"
+services:
+  statsd-proxy:
+    build: statsd-proxy
+    links:
+      - statsd-1
+      - statsd-2
+    ports:
+      - "8125:8125/udp"
+      - "8126:8126"
+  statsd-1:
+    build: statsd
+    links:
+      - relay
+    expose:
+      - "8125/udp"
+  statsd-2:
+    build: statsd
+    links:
+      - relay
+  relay:
+    build: graphite/relay
+    links:
+      - node-1
+      - node-2
+      - node-3
+  node-1:
+    build: graphite/node
+    ports:
+      - "8001:80"
+  node-2:
+    build: graphite/node
+    ports:
+      - "8002:80"
+  node-3:
+    build: graphite/node
+    ports:
+      - "8003:80"
+  master:
+    build: graphite/master
+    links:
+      - node-1
+      - node-2
+      - node-3
+    ports:
+      - "80:80"
