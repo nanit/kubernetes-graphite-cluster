@@ -26,16 +26,10 @@ services:
       - node-3
   node-1:
     build: graphite/node
-    ports:
-      - "8001:80"
   node-2:
     build: graphite/node
-    ports:
-      - "8002:80"
   node-3:
     build: graphite/node
-    ports:
-      - "8003:80"
   master:
     build: graphite/master
     links:
