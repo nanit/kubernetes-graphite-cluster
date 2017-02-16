@@ -126,8 +126,6 @@ Optional Variables:
   graphitePort: 2003,
   flushInterval: 5000,
   deleteIdleStats: true,
-  debug: true,
-  dumpMessages: true,
   graphite:
   {
     legacyNamespace: false,
