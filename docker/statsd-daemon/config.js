@@ -121,7 +121,7 @@ Optional Variables:
 {
   servers: [ {server: "./servers/udp", port: 8125} ], 
   backends: [ "./backends/graphite" ],
-  graphiteHost: "relay",
+  graphiteHost: "carbon-relay",
   graphitePort: 2003,
   flushInterval: 5000,
   deleteIdleStats: true,
