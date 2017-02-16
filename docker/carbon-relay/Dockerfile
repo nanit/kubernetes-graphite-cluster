@@ -11,6 +11,6 @@ run mkdir -p /var/log/carbon
 add conf/carbon.conf /opt/graphite/conf/carbon.conf
 add conf/storage-schemas.conf /opt/graphite/conf/storage-schemas.conf
 
-EXPOSE 2003/udp
+EXPOSE 2003
 
 CMD ["/opt/graphite/bin/carbon-relay.py", "--debug", "--logdir=/var/log/carbon", "start"]
