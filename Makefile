@@ -71,4 +71,4 @@ docker-carbon-relay:
 
 
 
-deploy: deploy-statsd-proxy deploy-statsd-daemon# deploy-carbon-relay deploy-graphite-node deploy-graphite-master
+deploy: deploy-statsd-proxy deploy-statsd-daemon deploy-carbon-relay# deploy-graphite-node deploy-graphite-master
