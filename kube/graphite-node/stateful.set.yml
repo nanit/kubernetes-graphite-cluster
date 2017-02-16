@@ -21,11 +21,11 @@ spec:
         - containerPort: 2004
           name: pickle
           protocol: TCP
-  volumeClaimTemplates:
-  - metadata:
-      name: graphite-node-pv
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      resources:
-        requests:
-          storage: 30Gi
+  # volumeClaimTemplates:
+  # - metadata:
+  #     name: graphite-node-pv
+  #   spec:
+  #     accessModes: [ "ReadWriteOnce" ]
+  #     resources:
+  #       requests:
+  #         storage: 30Gi
