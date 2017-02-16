@@ -12,4 +12,7 @@ spec:
   - port: 8125
     name: incoming-udp
     protocol: UDP
+  - port: 8126
+    name: admin
+    protocol: TCP
 
