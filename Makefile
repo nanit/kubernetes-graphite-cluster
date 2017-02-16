@@ -10,7 +10,7 @@ endef
 
 define generate-statsd-proxy-dep
 	if [ -z "$(STATSD_PROXY_REPLICAS)" ]; then echo "ERROR: STATSD_PROXY_REPLICAS is empty!"; exit 1; fi
-	sed -e 's/{{APP_NAME}}/$(STATSD_PROXY_APP_NAME})/g;s,{{IMAGE_NAME}},$(STATSD_PROXY_IMAGE_NAME}),g;s/{{REPLICAS}}/$(STATSD_PROXY_REPLICAS)/g' kube/$(STATSD_PROXY_APP_NAME)/dep.yml
+	sed -e 's/{{APP_NAME}}/$(STATSD_PROXY_APP_NAME)/g;s,{{IMAGE_NAME}},$(STATSD_PROXY_IMAGE_NAME),g;s/{{REPLICAS}}/$(STATSD_PROXY_REPLICAS)/g' kube/$(STATSD_PROXY_APP_NAME)/dep.yml
 endef
 
 deploy-statsd-proxy: docker-statsd-proxy
