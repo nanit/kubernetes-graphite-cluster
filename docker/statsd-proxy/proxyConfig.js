@@ -1,7 +1,7 @@
 {
 nodes: [
-{host: 'statsd-daemon-1.statsd-daemon.default.svc.cluster.local', port: 8125, adminport: 8126},
-{host: 'statsd-daemon-2.statsd-daemon.default.svc.cluster.local', port: 8125, adminport: 8126}
+{host: 'statsd-daemon-1.statsd-daemon', port: 8125, adminport: 8126},
+{host: 'statsd-daemon-2.statsd-daemon', port: 8125, adminport: 8126}
 ],
 server: './servers/udp',
 host:  '0.0.0.0',
