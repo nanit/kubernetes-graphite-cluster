@@ -8,8 +8,10 @@ spec:
     app: {{APP_NAME}}
   ports:
   - port: 8125
+    name: default-udp
     targetPort: 8125
     protocol: UDP
   - port: 8188
+    name: backward-compatible-udp
     targetPort: 8125
     protocol: UDP
