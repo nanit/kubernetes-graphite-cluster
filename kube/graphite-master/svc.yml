@@ -12,7 +12,3 @@ spec:
   - port: 80
     name: http
     protocol: TCP
-  - port: 2004
-    name: pickle
-    protocol: TCP
-

@@ -93,5 +93,29 @@ deploy-graphite-node: docker-graphite-node
 docker-graphite-node:
 	sudo docker pull $(GRAPHITE_NODE_IMAGE_NAME) || (sudo docker build -t $(GRAPHITE_NODE_IMAGE_NAME) $(GRAPHITE_NODE_DOCKER_DIR) && sudo docker push $(GRAPHITE_NODE_IMAGE_NAME))
 
+#-------------------------------------------------------------------------------------------------------------------------------------------------
+GRAPHITE_MASTER_APP_NAME=graphite
+GRAPHITE_MASTER_DIR_NAME=graphite-master
+GRAPHITE_MASTER_DOCKER_DIR=docker/$(GRAPHITE_MASTER_DIR_NAME)
+GRAPHITE_MASTER_IMAGE_TAG=$(shell git log -n 1 --pretty=format:%h $(GRAPHITE_MASTER_DOCKER_DIR))
+GRAPHITE_MASTER_IMAGE_NAME=nanit/$(GRAPHITE_MASTER_APP_NAME):$(GRAPHITE_MASTER_IMAGE_TAG)
+GRAPHITE_MASTER_REPLICAS?=$(shell curl -s config/$(NANIT_ENV)/$(GRAPHITE_MASTER_APP_NAME)/replicas)
 
-deploy: deploy-statsd-proxy deploy-statsd-daemon deploy-carbon-relay deploy-graphite-node# deploy-graphite-master
+define generate-graphite-master-svc
+	sed -e 's/{{APP_NAME}}/$(GRAPHITE_MASTER_APP_NAME)/g' kube/$(GRAPHITE_MASTER_DIR_NAME)/svc.yml
+endef
+
+define generate-graphite-master-dep
+	if [ -z "$(GRAPHITE_MASTER_REPLICAS)" ]; then echo "ERROR: GRAPHITE_MASTER_REPLICAS is empty!"; exit 1; fi
+	sed -e 's/{{APP_NAME}}/$(GRAPHITE_MASTER_APP_NAME)/g;s,{{IMAGE_NAME}},$(GRAPHITE_MASTER_IMAGE_NAME),g;s/{{REPLICAS}}/$(GRAPHITE_MASTER_REPLICAS)/g' kube/$(GRAPHITE_MASTER_DIR_NAME)/dep.yml
+endef
+
+deploy-graphite-master: docker-graphite-master
+	kubectl get svc $(GRAPHITE_MASTER_APP_NAME) || $(call generate-graphite-master-svc) | kubectl create -f -
+	$(call generate-graphite-master-dep) | kubectl apply -f -
+
+docker-graphite-master:
+	sudo docker pull $(GRAPHITE_MASTER_IMAGE_NAME) || (sudo docker build -t $(GRAPHITE_MASTER_IMAGE_NAME) $(GRAPHITE_MASTER_DOCKER_DIR) && sudo docker push $(GRAPHITE_MASTER_IMAGE_NAME))
+
+
+deploy: deploy-statsd-proxy deploy-statsd-daemon deploy-carbon-relay deploy-graphite-node deploy-graphite-master
