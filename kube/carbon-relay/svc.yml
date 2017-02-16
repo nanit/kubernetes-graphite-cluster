@@ -7,5 +7,10 @@ spec:
     app: {{APP_NAME}}
   ports:
   - port: 2003
+    name: incoming
     targetPort: 2003
     protocol: UDP
+  - port: 2003
+    name: incoming-tcp
+    targetPort: 2003
+    protocol: TCP

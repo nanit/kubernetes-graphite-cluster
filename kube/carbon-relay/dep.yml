@@ -16,3 +16,6 @@ spec:
           - containerPort: 2003
             name: incoming-udp
             protocol: UDP
+          - containerPort: 2003
+            name: incoming-tcp
+            protocol: TCP
