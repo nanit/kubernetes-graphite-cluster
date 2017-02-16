@@ -35,7 +35,7 @@ endef
 
 define generate-statsd-daemon-dep
 	if [ -z "$(STATSD_DAEMON_REPLICAS)" ]; then echo "ERROR: STATSD_DAEMON_REPLICAS is empty!"; exit 1; fi
-	sed -e 's/{{APP_NAME}}/$(STATSD_DAEMON_APP_NAME)/g;s,{{IMAGE_NAME}},$(STATSD_DAEMON_IMAGE_NAME),g;s/{{REPLICAS}}/$(STATSD_DAEMON_REPLICAS)/g' kube/$(STATSD_DAEMON_DIR_NAME)/dep.yml
+	sed -e 's/{{APP_NAME}}/$(STATSD_DAEMON_APP_NAME)/g;s,{{IMAGE_NAME}},$(STATSD_DAEMON_IMAGE_NAME),g;s/{{REPLICAS}}/$(STATSD_DAEMON_REPLICAS)/g' kube/$(STATSD_DAEMON_DIR_NAME)/stateful.set.yml
 endef
 
 deploy-statsd-daemon: docker-statsd-daemon
@@ -44,6 +44,30 @@ deploy-statsd-daemon: docker-statsd-daemon
 
 docker-statsd-daemon:
 	sudo docker pull $(STATSD_DAEMON_IMAGE_NAME) || (sudo docker build -t $(STATSD_DAEMON_IMAGE_NAME) $(STATSD_DAEMON_DOCKER_DIR) && sudo docker push $(STATSD_DAEMON_IMAGE_NAME))
+
+#-------------------------------------------------------------------------------------------------------------------------------------------------
+CARBON_RELAY_APP_NAME=carbon-relay
+CARBON_RELAY_DIR_NAME=carbon-relay
+CARBON_RELAY_DOCKER_DIR=docker/$(CARBON_RELAY_DIR_NAME)
+CARBON_RELAY_IMAGE_TAG=$(shell git log -n 1 --pretty=format:%h $(CARBON_RELAY_DOCKER_DIR))
+CARBON_RELAY_IMAGE_NAME=nanit/$(CARBON_RELAY_APP_NAME):$(CARBON_RELAY_IMAGE_TAG)
+CARBON_RELAY_REPLICAS?=$(shell curl -s config/$(NANIT_ENV)/$(CARBON_RELAY_APP_NAME)/replicas)
+
+define generate-carbon-relay-svc
+	sed -e 's/{{APP_NAME}}/$(CARBON_RELAY_APP_NAME)/g' kube/$(CARBON_RELAY_DIR_NAME)/svc.yml
+endef
+
+define generate-carbon-relay-dep
+	if [ -z "$(CARBON_RELAY_REPLICAS)" ]; then echo "ERROR: CARBON_RELAY_REPLICAS is empty!"; exit 1; fi
+	sed -e 's/{{APP_NAME}}/$(CARBON_RELAY_APP_NAME)/g;s,{{IMAGE_NAME}},$(CARBON_RELAY_IMAGE_NAME),g;s/{{REPLICAS}}/$(CARBON_RELAY_REPLICAS)/g' kube/$(CARBON_RELAY_DIR_NAME)/dep.yml
+endef
+
+deploy-carbon-relay: docker-carbon-relay
+	kubectl get svc $(CARBON_RELAY_APP_NAME) || $(call generate-carbon-relay-svc) | kubectl create -f -
+	$(call generate-carbon-relay-dep) | kubectl apply -f -
+
+docker-carbon-relay:
+	sudo docker pull $(CARBON_RELAY_IMAGE_NAME) || (sudo docker build -t $(CARBON_RELAY_IMAGE_NAME) $(CARBON_RELAY_DOCKER_DIR) && sudo docker push $(CARBON_RELAY_IMAGE_NAME))
 
 
 
