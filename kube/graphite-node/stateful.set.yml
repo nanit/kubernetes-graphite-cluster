@@ -1,0 +1,31 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: {{APP_NAME}}
+spec:
+  serviceName: {{APP_NAME}}
+  replicas: {{REPLICAS}}
+  template:
+    metadata:
+      labels:
+        app: {{APP_NAME}}
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: {{APP_NAME}}
+        image: {{IMAGE_NAME}}
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        - containerPort: 2004
+          name: pickle
+          protocol: TCP
+  volumeClaimTemplates:
+  - metadata:
+      name: graphite-node-pv
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 30Gi

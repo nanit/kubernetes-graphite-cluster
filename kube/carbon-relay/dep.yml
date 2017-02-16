@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{APP_NAME}}
+spec:
+  replicas: {{REPLICAS}}
+  template:
+    metadata:
+      labels:
+        app: {{APP_NAME}}
+    spec:
+      containers:
+        - name: {{APP_NAME}}
+          image: {{IMAGE_NAME}}
+          ports:
+          - containerPort: 2003
+            name: incoming-udp
+            protocol: UDP
