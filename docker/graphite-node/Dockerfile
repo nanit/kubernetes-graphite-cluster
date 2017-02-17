@@ -18,6 +18,7 @@ add	./webapp/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
 add	./conf/carbon.conf /opt/graphite/conf/carbon.conf
 add	./conf/storage-schemas.conf /opt/graphite/conf/storage-schemas.conf
 add	./conf/storage-aggregation.conf /opt/graphite/conf/storage-aggregation.conf
+add ./carbon-init.sh /
 run	mkdir -p /opt/graphite/storage/whisper
 run	touch /opt/graphite/storage/graphite.db /opt/graphite/storage/index
 run	chown -R www-data /opt/graphite/storage
