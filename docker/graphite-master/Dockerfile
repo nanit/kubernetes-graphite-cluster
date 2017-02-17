@@ -20,7 +20,6 @@ add	./conf/storage-schemas.conf /opt/graphite/conf/storage-schemas.conf
 add	./conf/storage-aggregation.conf /opt/graphite/conf/storage-aggregation.conf
 run	mkdir -p /opt/graphite/storage/whisper
 run	touch /opt/graphite/storage/graphite.db /opt/graphite/storage/index
-run	chown -R www-data /opt/graphite/storage
 run	chmod 0775 /opt/graphite/storage /opt/graphite/storage/whisper
 run	chmod 0664 /opt/graphite/storage/graphite.db
 run	cd /opt/graphite/webapp/graphite && python manage.py syncdb --noinput
