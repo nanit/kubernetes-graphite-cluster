@@ -21,6 +21,9 @@ spec:
         - containerPort: 2004
           name: pickle
           protocol: TCP
+        volumeMounts:
+        - name: graphite-node-pv
+          mountPath: /opt/graphite/storage/whisper
   volumeClaimTemplates:
   - metadata:
       name: graphite-node-pv
