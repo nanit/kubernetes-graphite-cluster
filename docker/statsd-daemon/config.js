@@ -119,9 +119,10 @@ Optional Variables:
                          changes. The default is true. Set this to false to disable.
 */
 {
+  mgmt_port: 8126,
   servers: [ {server: "./servers/udp", port: 8125} ], 
   backends: [ "./backends/graphite" ],
-  graphiteHost: "relay",
+  graphiteHost: "carbon-relay",
   graphitePort: 2003,
   flushInterval: 5000,
   deleteIdleStats: true,
