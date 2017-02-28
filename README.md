@@ -17,4 +17,6 @@ A ready to deploy graphite cluster to work on top of Kubernetes.
 1. Clone this repository
 2. Run `make deploy`
 
-
+## Building your own images
+If you want to build use your own images run `export DOCKER_REPOSITORY=my_company && make deploy`
+It will build the images, push them to your docker repository and use them to create all the needed kubernetes deployments.
