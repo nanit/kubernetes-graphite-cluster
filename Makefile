@@ -1,4 +1,6 @@
 DOCKER_REPOSITORY?=nanit
+SUDO?=sudo
+
 STATSD_PROXY_APP_NAME=statsd
 STATSD_PROXY_DIR_NAME=statsd-proxy
 STATSD_PROXY_DOCKER_DIR=docker/$(STATSD_PROXY_DIR_NAME)
@@ -20,7 +22,7 @@ deploy-statsd-proxy: docker-statsd-proxy
 	$(call generate-statsd-proxy-dep) | kubectl apply -f -
 
 docker-statsd-proxy:
-	sudo docker pull $(STATSD_PROXY_IMAGE_NAME) || (sudo docker build -t $(STATSD_PROXY_IMAGE_NAME) $(STATSD_PROXY_DOCKER_DIR) && sudo docker push $(STATSD_PROXY_IMAGE_NAME))
+	$(SUDO) docker pull $(STATSD_PROXY_IMAGE_NAME) || ($(SUDO) docker build -t $(STATSD_PROXY_IMAGE_NAME) $(STATSD_PROXY_DOCKER_DIR) && $(SUDO) docker push $(STATSD_PROXY_IMAGE_NAME))
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------
 STATSD_DAEMON_APP_NAME=statsd-daemon
@@ -44,7 +46,7 @@ deploy-statsd-daemon: docker-statsd-daemon
 	$(call generate-statsd-daemon-dep) | kubectl apply -f -
 
 docker-statsd-daemon:
-	sudo docker pull $(STATSD_DAEMON_IMAGE_NAME) || (sudo docker build -t $(STATSD_DAEMON_IMAGE_NAME) $(STATSD_DAEMON_DOCKER_DIR) && sudo docker push $(STATSD_DAEMON_IMAGE_NAME))
+	$(SUDO) docker pull $(STATSD_DAEMON_IMAGE_NAME) || ($(SUDO) docker build -t $(STATSD_DAEMON_IMAGE_NAME) $(STATSD_DAEMON_DOCKER_DIR) && $(SUDO) docker push $(STATSD_DAEMON_IMAGE_NAME))
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------
 CARBON_RELAY_APP_NAME=carbon-relay
@@ -68,7 +70,7 @@ deploy-carbon-relay: docker-carbon-relay
 	$(call generate-carbon-relay-dep) | kubectl apply -f -
 
 docker-carbon-relay:
-	sudo docker pull $(CARBON_RELAY_IMAGE_NAME) || (sudo docker build -t $(CARBON_RELAY_IMAGE_NAME) $(CARBON_RELAY_DOCKER_DIR) && sudo docker push $(CARBON_RELAY_IMAGE_NAME))
+	$(SUDO) docker pull $(CARBON_RELAY_IMAGE_NAME) || ($(SUDO) docker build -t $(CARBON_RELAY_IMAGE_NAME) $(CARBON_RELAY_DOCKER_DIR) && $(SUDO) docker push $(CARBON_RELAY_IMAGE_NAME))
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------
 GRAPHITE_NODE_APP_NAME=graphite-node
@@ -92,7 +94,7 @@ deploy-graphite-node: docker-graphite-node
 	$(call generate-graphite-node-dep) | kubectl apply -f -
 
 docker-graphite-node:
-	sudo docker pull $(GRAPHITE_NODE_IMAGE_NAME) || (sudo docker build -t $(GRAPHITE_NODE_IMAGE_NAME) $(GRAPHITE_NODE_DOCKER_DIR) && sudo docker push $(GRAPHITE_NODE_IMAGE_NAME))
+	$(SUDO) docker pull $(GRAPHITE_NODE_IMAGE_NAME) || ($(SUDO) docker build -t $(GRAPHITE_NODE_IMAGE_NAME) $(GRAPHITE_NODE_DOCKER_DIR) && $(SUDO) docker push $(GRAPHITE_NODE_IMAGE_NAME))
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------
 GRAPHITE_MASTER_APP_NAME=graphite
@@ -116,7 +118,7 @@ deploy-graphite-master: docker-graphite-master
 	$(call generate-graphite-master-dep) | kubectl apply -f -
 
 docker-graphite-master:
-	sudo docker pull $(GRAPHITE_MASTER_IMAGE_NAME) || (sudo docker build -t $(GRAPHITE_MASTER_IMAGE_NAME) $(GRAPHITE_MASTER_DOCKER_DIR) && sudo docker push $(GRAPHITE_MASTER_IMAGE_NAME))
+	$(SUDO) docker pull $(GRAPHITE_MASTER_IMAGE_NAME) || ($(SUDO) docker build -t $(GRAPHITE_MASTER_IMAGE_NAME) $(GRAPHITE_MASTER_DOCKER_DIR) && $(SUDO) docker push $(GRAPHITE_MASTER_IMAGE_NAME))
 
 
 deploy: deploy-statsd-proxy deploy-statsd-daemon deploy-carbon-relay deploy-graphite-node deploy-graphite-master

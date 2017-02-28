@@ -17,8 +17,17 @@ A ready to deploy graphite cluster to work on top of Kubernetes.
 
 ## Deployment:
 1. Clone this repository
-2. Run `make deploy`
+2. Run:
+```
+export STATSD_PROXY_REPLICAS=3 && \
+export STATSD_DAEMON_REPLICAS=2 && \
+export CARBON_RELAY_REPLICAS=3 && \ 
+export GRAPHITE_NODE_REPLICAS=5 && \
+export GRAPHITE_MASTER_REPLICAS=2 && \
+export SUDO="" && \
+make deploy
 
+```
 ## Usage:
 After the deployment is done there are two endpoints of interest:
 
