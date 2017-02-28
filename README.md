@@ -12,7 +12,8 @@ A ready to deploy graphite cluster to work on top of Kubernetes.
 ## Requirements:
 1. Kubernetes version 1.5.X (We're using StatefulSet)
 2. kubectl configured to work with your Kubernetes API
-3. Optional - Access to your own docker repository to store your own images. That's relevant if you don't want to use the default images offered here.
+3. Tested on Kubernetes 1.5.2 on top of AWS (See future work)
+4. Optional - Access to your own docker repository to store your own images. That's relevant if you don't want to use the default images offered here.
 
 ## Deployment:
 1. Clone this repository
@@ -27,3 +28,8 @@ After the deployment is done there are two endpoints of interest:
 ## Building your own images
 If you want to build use your own images run `export DOCKER_REPOSITORY=my_company && make deploy`
 It will build the images, push them to your docker repository and use them to create all the needed kubernetes deployments.
+
+## Future work
+1. Fetch stateful sets (statsd daemons and graphite data nodes) addresses dynamically on startup to allow easier setup for number of replicas in these stateful sets.
+2. Store Graphite events on a persistent storage
+3. Test on other cloud providers
