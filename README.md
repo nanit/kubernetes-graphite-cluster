@@ -17,6 +17,11 @@ A ready to deploy graphite cluster to work on top of Kubernetes.
 1. Clone this repository
 2. Run `make deploy`
 
+## Usage:
+After the deployment is done there are two endpoints of interest:
+1. statsd:8125 is the host for your metrics collection. It points the statsd proxies.
+2. graphite:80 is the host for you metrics queries. It points to the graphite query node which queries all data nodes in the cluster.
+
 ## Building your own images
 If you want to build use your own images run `export DOCKER_REPOSITORY=my_company && make deploy`
 It will build the images, push them to your docker repository and use them to create all the needed kubernetes deployments.
