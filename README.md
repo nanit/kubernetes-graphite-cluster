@@ -15,21 +15,53 @@ A ready to deploy graphite cluster to work on top of Kubernetes.
 3. Tested on Kubernetes 1.5.2 on top of AWS (See future work)
 4. Optional - Access to your own docker repository to store your own images. That's relevant if you don't want to use the default images offered here.
 
+## Environment Variables:
+| Name                     | Default Value | Purpose                                                                  | Can be changed? |
+|--------------------------|---------------|--------------------------------------------------------------------------|-----------------|
+| DOCKER_REPOSITORY        | nanit         | Change it if you want to build and use custom docker repository          | Yes             |
+| SUDO                     | sudo          | Should docker commands be prefixed with sudo. Change to "" to omit sudo. | Yes             |
+| STATSD_PROXY_REPLICAS    | None          | Number of replicas for statsd proxy                                      | Yes             |
+| STATSD_DAEMON_REPLICAS   | None          | Must be set to 2                                                         | No              |
+| CARBON_RELAY_REPLICAS    | None          | Number of replicas for carbon relay                                      | Yes             |
+| GRAPHITE_NODE_REPLICAS   | None          | Must be set to 5                                                         | No              |
+| GRAPHITE_MASTER_REPLICAS | None          | Number of replicas for graphite query node                               | Yes             |
+
 ## Deployment:
 1. Clone this repository
-2. Run `make deploy`
-
+2. Run:
+```
+export DOCKER_REPOSITORY=nanit && \
+export STATSD_PROXY_REPLICAS=3 && \
+export STATSD_DAEMON_REPLICAS=2 && \
+export CARBON_RELAY_REPLICAS=3 && \
+export GRAPHITE_NODE_REPLICAS=5 && \
+export GRAPHITE_MASTER_REPLICAS=2 && \
+export SUDO="" && \
+make deploy
+```
 ## Usage:
 After the deployment is done there are two endpoints of interest:
 
 1. **statsd:8125** is the host for your metrics collection. It points the statsd proxies.
 2. **graphite:80** is the host for you metrics queries. It points to the graphite query node which queries all data nodes in the cluster.
 
+
+## Verifying The Deployment:
+To verify everything works as expected:
+
+1. Enter an interactive shell session in one of the pods: `kubectl exec -it statsd-daemon-0 /bin/sh`
+2. run `echo "test_counter:1|c" | nc -w1 -u statsd 8125` a few times to get some data into Graphite
+3. Install curl `apk --update add curl`
+4. Fetch data from Graphite: `curl 'graphite/render?target=stats.counters.test_counter.count&from=-10min&format=json'`
+
+You should see a lot of null values along with your few increments at the end.
+
 ## Building your own images
-If you want to build use your own images run `export DOCKER_REPOSITORY=my_company && make deploy`
+If you want to build use your own images make sure to change the DOCKER_REPOSITORY environment variable to your own docker repository.
 It will build the images, push them to your docker repository and use them to create all the needed kubernetes deployments.
 
 ## Future work
-1. Fetch stateful sets (statsd daemons and graphite data nodes) addresses dynamically on startup to allow easier setup for number of replicas in these stateful sets.
+1. Fetch stateful sets (statsd daemons and graphite data nodes) addresses dynamically on startup to allow easier setup for number of replicas in these stateful sets. Right now it means that GRAPHITE_NODE_REPLICAS and STATSD_DAEMON_REPLICAS cannot be changed without rebuilding the docker images.
 2. Store Graphite events on a persistent storage
-3. Test on other cloud providers
+3. Add MemcacheD layer
+4. Test on other cloud providers
