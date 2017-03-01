@@ -33,7 +33,7 @@ A ready to deploy graphite cluster to work on top of Kubernetes.
 export DOCKER_REPOSITORY=nanit && \
 export STATSD_PROXY_REPLICAS=3 && \
 export STATSD_DAEMON_REPLICAS=2 && \
-export CARBON_RELAY_REPLICAS=3 && \ 
+export CARBON_RELAY_REPLICAS=3 && \
 export GRAPHITE_NODE_REPLICAS=5 && \
 export GRAPHITE_MASTER_REPLICAS=2 && \
 export SUDO="" && \
@@ -49,10 +49,10 @@ After the deployment is done there are two endpoints of interest:
 ## Verifying The Deployment:
 To verify everything works as expected:
 
-1. kubectl exec -it statsd-daemon-0 /bin/sh
-2. run `echo "test_counter:1|c" | nc -w1 -u statsd 8125` a few times to get some data into graphite
+1. Enter an interactive shell session in one of the pods: `kubectl exec -it statsd-daemon-0 /bin/sh`
+2. run `echo "test_counter:1|c" | nc -w1 -u statsd 8125` a few times to get some data into Graphite
 3. Install curl `apk --update add curl`
-4. Fetch your data: `curl 'graphite/render?target=stats.counters.test_counter.count&from=-10min&format=json'`
+4. Fetch data from Graphite: `curl 'graphite/render?target=stats.counters.test_counter.count&from=-10min&format=json'`
 
 You should see a lot of null values along with a your few increments.
 
