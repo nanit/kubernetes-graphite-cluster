@@ -54,13 +54,14 @@ To verify everything works as expected:
 3. Install curl `apk --update add curl`
 4. Fetch data from Graphite: `curl 'graphite/render?target=stats.counters.test_counter.count&from=-10min&format=json'`
 
-You should see a lot of null values along with a your few increments.
+You should see a lot of null values along with your few increments at the end.
 
 ## Building your own images
-If you want to build use your own images run `export DOCKER_REPOSITORY=my_company && make deploy`
+If you want to build use your own images make sure to change the DOCKER_REPOSITORY environment variable to your own docker repository.
 It will build the images, push them to your docker repository and use them to create all the needed kubernetes deployments.
 
 ## Future work
 1. Fetch stateful sets (statsd daemons and graphite data nodes) addresses dynamically on startup to allow easier setup for number of replicas in these stateful sets. Right now it means that GRAPHITE_NODE_REPLICAS and STATSD_DAEMON_REPLICAS cannot be changed without rebuilding the docker images.
 2. Store Graphite events on a persistent storage
-3. Test on other cloud providers
+3. Add MemcacheD layer
+4. Test on other cloud providers
