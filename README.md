@@ -66,3 +66,8 @@ It will build the images, push them to your docker repository and use them to cr
 2. Store Graphite events on a persistent storage
 3. Add MemcacheD layer
 4. Test on other cloud providers
+
+## Acknowledgement
+
+1. I have learnt a lot about Graphite clustering from [this excellent article](https://grey-boundary.io/the-architecture-of-clustering-graphite)
+2. The docker images for the graphite nodes are based on [this repository](https://github.com/nickstenning/docker-graphite)
