@@ -19,7 +19,7 @@ Find the full details [here](https://medium.com/@erezrabih/creating-a-graphite-c
 ## Environment Variables:
 | Name                     | Default Value | Purpose                                                                  | Can be changed? |
 |--------------------------|---------------|--------------------------------------------------------------------------|-----------------|
-| DOCKER_REPOSITORY        | nanit         | Change it if you want to build and use custom docker repository          | Yes             |
+| DOCKER_REPOSITORY        | nanit         | Change it if you want to build and use custom docker repository. nanit images are public so leaving it as it is should work out of the box.          | Yes             |
 | SUDO                     | sudo          | Should docker commands be prefixed with sudo. Change to "" to omit sudo. | Yes             |
 | STATSD_PROXY_REPLICAS    | None          | Number of replicas for statsd proxy                                      | Yes             |
 | STATSD_DAEMON_REPLICAS   | None          | Must be set to 2                                                         | No              |
@@ -62,10 +62,8 @@ If you want to build use your own images make sure to change the DOCKER_REPOSITO
 It will build the images, push them to your docker repository and use them to create all the needed kubernetes deployments.
 
 ## Future work
-1. Fetch stateful sets (statsd daemons and graphite data nodes) addresses dynamically on startup to allow easier setup for number of replicas in these stateful sets. Right now it means that GRAPHITE_NODE_REPLICAS and STATSD_DAEMON_REPLICAS cannot be changed without rebuilding the docker images.
-2. Store Graphite events on a persistent storage
-3. Add MemcacheD layer
-4. Test on other cloud providers
+
+MOVED TO ISSUES
 
 ## Acknowledgement
 
