@@ -3,7 +3,7 @@ run	echo 'deb http://us.archive.ubuntu.com/ubuntu/ trusty universe' >> /etc/apt/
 run	apt-get -y update
 
 # Install required packages
-run	apt-get -y install python-ldap python-cairo python-django python-twisted python-django-tagging python-simplejson python-memcache python-pysqlite2 python-support python-tz python-pip gunicorn supervisor nginx-light
+run	apt-get -y install python-ldap python-cairo python-django python-twisted python-django-tagging python-simplejson python-memcache python-pysqlite2 python-support python-tz python-pip gunicorn supervisor nginx-light cron
 run	pip install whisper==0.9.15
 run	pip install carbon==0.9.15
 run	pip install graphite-web==0.9.15
@@ -23,6 +23,11 @@ run	touch /opt/graphite/storage/graphite.db /opt/graphite/storage/index
 run	chmod 0775 /opt/graphite/storage /opt/graphite/storage/whisper
 run	chmod 0664 /opt/graphite/storage/graphite.db
 run	cd /opt/graphite/webapp/graphite && python manage.py syncdb --noinput
+
+# Install curator cron job
+ADD crontab /etc/cron.d/curator.cron
+RUN chmod 0644 /etc/cron.d/curator.cron
+RUN touch /var/log/cron.log
 
 # Nginx
 expose	80
