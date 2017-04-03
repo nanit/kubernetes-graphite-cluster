@@ -26,7 +26,6 @@ run	cd /opt/graphite/webapp/graphite && python manage.py syncdb --noinput
 
 # Install curator cron job
 ADD curator/cron /etc/cron.d/curator.cron
-RUN chmod 0644 /etc/cron.d/curator.cron
 ADD curator/run.sh /etc/cron.d/curator.sh
 RUN chmod +x /etc/cron.d/curator.sh
 
