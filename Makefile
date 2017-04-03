@@ -79,6 +79,7 @@ GRAPHITE_NODE_DOCKER_DIR=docker/$(GRAPHITE_NODE_DIR_NAME)
 GRAPHITE_NODE_IMAGE_TAG=$(shell git log -n 1 --pretty=format:%h $(GRAPHITE_NODE_DOCKER_DIR))
 GRAPHITE_NODE_IMAGE_NAME=$(DOCKER_REPOSITORY)/$(GRAPHITE_NODE_APP_NAME):$(GRAPHITE_NODE_IMAGE_TAG)
 GRAPHITE_NODE_REPLICAS?=$(shell curl -s config/$(NANIT_ENV)/$(GRAPHITE_NODE_APP_NAME)/replicas)
+GRAPHITE_NODE_CURATOR_RETENTION?=$(shell curl -s config/$(NANIT_ENV)/$(GRAPHITE_NODE_APP_NAME)/curator_retention)
 
 define generate-graphite-node-svc
 	sed -e 's/{{APP_NAME}}/$(GRAPHITE_NODE_APP_NAME)/g' kube/$(GRAPHITE_NODE_DIR_NAME)/svc.yml
@@ -86,7 +87,7 @@ endef
 
 define generate-graphite-node-dep
 	if [ -z "$(GRAPHITE_NODE_REPLICAS)" ]; then echo "ERROR: GRAPHITE_NODE_REPLICAS is empty!"; exit 1; fi
-	sed -e 's/{{APP_NAME}}/$(GRAPHITE_NODE_APP_NAME)/g;s,{{IMAGE_NAME}},$(GRAPHITE_NODE_IMAGE_NAME),g;s/{{REPLICAS}}/$(GRAPHITE_NODE_REPLICAS)/g' kube/$(GRAPHITE_NODE_DIR_NAME)/stateful.set.yml
+	sed -e 's/{{APP_NAME}}/$(GRAPHITE_NODE_APP_NAME)/g;s,{{IMAGE_NAME}},$(GRAPHITE_NODE_IMAGE_NAME),g;s/{{REPLICAS}}/$(GRAPHITE_NODE_REPLICAS)/g;s/{{CURATOR_RETENTION}}/$(GRAPHITE_NODE_CURATOR_RETENTION)/g' kube/$(GRAPHITE_NODE_DIR_NAME)/stateful.set.yml
 endef
 
 deploy-graphite-node: docker-graphite-node

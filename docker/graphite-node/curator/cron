@@ -1,0 +1,1 @@
+0 0 * * * /etc/cron.d/curator.sh >> /var/log/curator.log 2>&1
