@@ -1,6 +1,7 @@
 # kubernetes-graphite-cluster
 
 A ready to deploy graphite cluster to work on top of Kubernetes.
+Find the full details [here](https://medium.com/@erezrabih/creating-a-graphite-cluster-on-kubernetes-6b402a8a7438#.yyaz16gzq)
 
 ## Contents:
 1. A **statsd proxy** deployment and service for metric collection
@@ -16,16 +17,16 @@ A ready to deploy graphite cluster to work on top of Kubernetes.
 4. Optional - Access to your own docker repository to store your own images. That's relevant if you don't want to use the default images offered here.
 
 ## Environment Variables:
-| Name                            | Default Value | Purpose                                                                                       | Can be changed? |
-|---------------------------------|---------------|-----------------------------------------------------------------------------------------------|-----------------|
-| DOCKER_REPOSITORY               | nanit         | Change it if you want to build and use custom docker repository                               | Yes             |
-| SUDO                            | sudo          | Should docker commands be prefixed with sudo. Change to "" to omit sudo.                      | Yes             |
-| STATSD_PROXY_REPLICAS           | None          | Number of replicas for statsd proxy                                                           | Yes             |
-| STATSD_DAEMON_REPLICAS          | None          | Must be set to 2                                                                              | No              |
-| CARBON_RELAY_REPLICAS           | None          | Number of replicas for carbon relay                                                           | Yes             |
-| GRAPHITE_NODE_REPLICAS          | None          | Must be set to 5                                                                              | No              |
-| GRAPHITE_NODE_CURATOR_RETENTION | None          | Set this variable to run a cronjob which deletes metrics that haven't been written for X days | Yes             |
-| GRAPHITE_MASTER_REPLICAS        | None          | Number of replicas for graphite query node                                                    | Yes             |
+| Name                            | Default Value | Purpose                                                                                                                              | Can be changed? |
+|---------------------------------|---------------|--------------------------------------------------------------------------------------------------------------------------------------|-----------------|
+| DOCKER_REPOSITORY        | nanit         | Change it if you want to build and use custom docker repository. nanit images are public so leaving it as it is should work out of the box. | Yes             |
+| SUDO                            | sudo          | Should docker commands be prefixed with sudo. Change to "" to omit sudo.                                                             | Yes             |
+| STATSD_PROXY_REPLICAS           | None          | Number of replicas for statsd proxy                                                                                                  | Yes             |
+| STATSD_DAEMON_REPLICAS          | None          | Must be set to 2                                                                                                                     | No              |
+| CARBON_RELAY_REPLICAS           | None          | Number of replicas for carbon relay                                                                                                  | Yes             |
+| GRAPHITE_NODE_REPLICAS          | None          | Must be set to 5                                                                                                                     | No              |
+| GRAPHITE_NODE_CURATOR_RETENTION | None          | Set this variable to run a cronjob which deletes metrics that haven't been written for X days                                        | Yes             |
+| GRAPHITE_MASTER_REPLICAS        | None          | Number of replicas for graphite query node                                                                                           | Yes             |
 
 ## Deployment:
 1. Clone this repository
@@ -63,7 +64,10 @@ If you want to build use your own images make sure to change the DOCKER_REPOSITO
 It will build the images, push them to your docker repository and use them to create all the needed kubernetes deployments.
 
 ## Future work
-1. Fetch stateful sets (statsd daemons and graphite data nodes) addresses dynamically on startup to allow easier setup for number of replicas in these stateful sets. Right now it means that GRAPHITE_NODE_REPLICAS and STATSD_DAEMON_REPLICAS cannot be changed without rebuilding the docker images.
-2. Store Graphite events on a persistent storage
-3. Add MemcacheD layer
-4. Test on other cloud providers
+
+MOVED TO ISSUES
+
+## Acknowledgement
+
+1. I have learnt a lot about Graphite clustering from [this excellent article](https://grey-boundary.io/the-architecture-of-clustering-graphite)
+2. The docker images for the graphite nodes are based on [this repository](https://github.com/nickstenning/docker-graphite)
