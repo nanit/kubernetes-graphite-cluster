@@ -3,10 +3,29 @@ run	echo 'deb http://us.archive.ubuntu.com/ubuntu/ trusty universe' >> /etc/apt/
 run	apt-get -y update
 
 # Install required packages
-run	apt-get -y install python-ldap python-cairo python-django python-twisted python-django-tagging python-simplejson python-memcache python-pysqlite2 python-support python-tz python-pip gunicorn supervisor nginx-light
-run	pip install whisper==0.9.15
-run	pip install carbon==0.9.15
-run	pip install graphite-web==0.9.15
+RUN     apt-get -y update &&\ 
+	apt-get -y install software-properties-common python-django-tagging python-simplejson \
+	python-memcache python-ldap python-cairo python-pysqlite2 python-support python-pip \
+	gunicorn supervisor nginx-light git wget curl build-essential python-dev libffi-dev vim
+RUN     pip install Twisted==13.2.0
+RUN     pip install pytz
+RUN     git clone https://github.com/graphite-project/whisper.git /src/whisper            &&\
+        cd /src/whisper                                                                   &&\
+        git checkout 1.0.x                                                                &&\
+        python setup.py install
+
+RUN     git clone https://github.com/graphite-project/carbon.git /src/carbon              &&\
+        cd /src/carbon                                                                    &&\
+        git checkout 1.0.x                                                                &&\
+        python setup.py install
+
+
+RUN     git clone https://github.com/graphite-project/graphite-web.git /src/graphite-web  &&\
+        cd /src/graphite-web                                                              &&\
+        git checkout 1.0.x								                                                &&\
+        python setup.py install                                                           &&\
+        pip install -r requirements.txt                                                   &&\
+        python check-dependencies.py
 
 # Add system service config
 add	./nginx/nginx.conf /etc/nginx/nginx.conf
@@ -22,7 +41,9 @@ run	mkdir -p /opt/graphite/storage/whisper
 run	touch /opt/graphite/storage/graphite.db /opt/graphite/storage/index
 run	chmod 0775 /opt/graphite/storage /opt/graphite/storage/whisper
 run	chmod 0664 /opt/graphite/storage/graphite.db
-run	cd /opt/graphite/webapp/graphite && python manage.py syncdb --noinput
+RUN     cp /src/graphite-web/webapp/manage.py /opt/graphite/webapp
+
+run	cd /opt/graphite/webapp/ && python manage.py migrate --run-syncdb --noinput
 
 # Nginx
 expose	80
