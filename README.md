@@ -19,10 +19,10 @@ Find the full details [here](https://medium.com/@erezrabih/creating-a-graphite-c
 ## Environment Variables:
 | Name                            | Default Value | Purpose                                                                                                                              | Can be changed? |
 |---------------------------------|---------------|--------------------------------------------------------------------------------------------------------------------------------------|-----------------|
-| DOCKER_REPOSITORY        | nanit         | Change it if you want to build and use custom docker repository. nanit images are public so leaving it as it is should work out of the box. | Yes             |
+| DOCKER_REPOSITORY               | nanit         | Change it if you want to build and use custom docker repository. nanit images are public so leaving it as it is should work out of the box. | Yes             |
 | SUDO                            | sudo          | Should docker commands be prefixed with sudo. Change to "" to omit sudo.                                                             | Yes             |
 | STATSD_PROXY_REPLICAS           | None          | Number of replicas for statsd proxy                                                                                                  | Yes             |
-| STATSD_DAEMON_REPLICAS          | None          | Must be set to 2                                                                                                                     | No              |
+| STATSD_DAEMON_REPLICAS          | None          | Must be set to 4                                                                                                                     | No              |
 | CARBON_RELAY_REPLICAS           | None          | Number of replicas for carbon relay                                                                                                  | Yes             |
 | GRAPHITE_NODE_REPLICAS          | None          | Must be set to 5                                                                                                                     | No              |
 | GRAPHITE_NODE_CURATOR_RETENTION | None          | Set this variable to run a cronjob which deletes metrics that haven't been written for X days                                        | Yes             |
@@ -34,10 +34,10 @@ Find the full details [here](https://medium.com/@erezrabih/creating-a-graphite-c
 ```
 export DOCKER_REPOSITORY=nanit && \
 export STATSD_PROXY_REPLICAS=3 && \
-export STATSD_DAEMON_REPLICAS=2 && \
+export STATSD_DAEMON_REPLICAS=4 && \
 export CARBON_RELAY_REPLICAS=3 && \
 export GRAPHITE_NODE_REPLICAS=5 && \
-export GRAPHITE_NODE_CURATOR_RETENTION=14 && \
+export GRAPHITE_NODE_CURATOR_RETENTION=5 && \
 export GRAPHITE_MASTER_REPLICAS=2 && \
 export SUDO="" && \
 make deploy
