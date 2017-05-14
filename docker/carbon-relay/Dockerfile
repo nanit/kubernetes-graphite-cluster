@@ -22,7 +22,9 @@ RUN     git clone https://github.com/graphite-project/carbon.git /src/carbon    
 
 add conf/carbon.conf /opt/graphite/conf/carbon.conf
 add conf/storage-schemas.conf /opt/graphite/conf/storage-schemas.conf
+add set-cluster-nodes.sh /set-cluster-nodes.sh
+add entrypoint.sh /entrypoint.sh
 
 EXPOSE 2003
 
-CMD ["/opt/graphite/bin/carbon-relay.py", "--debug", "--logdir=/var/log/carbon", "start"]
+CMD ["/entrypoint.sh"]

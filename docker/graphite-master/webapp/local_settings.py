@@ -243,7 +243,7 @@ LOG_RENDERING_PERFORMANCE = True
 # remote server in the cluster. These servers must each have local access to
 # metric data. Note that the first server to return a match for a query will be
 # used.
-CLUSTER_SERVERS = ["graphite-node-0.graphite-node:80", "graphite-node-1.graphite-node:80", "graphite-node-2.graphite-node:80", "graphite-node-3.graphite-node:80", "graphite-node-4.graphite-node:80"]
+CLUSTER_SERVERS = [@@GRAPHITE_NODES@@]
 
 # This settings control wether https is used to communicate between cluster members
 #INTRACLUSTER_HTTPS = False
