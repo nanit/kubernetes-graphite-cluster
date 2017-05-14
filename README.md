@@ -13,7 +13,7 @@ Find the full details [here](https://medium.com/@erezrabih/creating-a-graphite-c
 ## Requirements:
 1. Kubernetes version 1.5.X (We're using StatefulSet)
 2. kubectl configured to work with your Kubernetes API
-3. Tested on Kubernetes 1.5.2 on top of AWS (See future work)
+3. Tested on Kubernetes 1.5.2 on top of AWS/[GKE](https://github.com/nanit/kubernetes-graphite-cluster/issues/6)
 4. Optional - Access to your own docker repository to store your own images. That's relevant if you don't want to use the default images offered here.
 
 ## Environment Variables:
