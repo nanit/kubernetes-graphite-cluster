@@ -24,8 +24,8 @@ Find the full details [here](https://medium.com/@erezrabih/creating-a-graphite-c
 | STATSD_PROXY_REPLICAS           | None          | Number of replicas for statsd proxy                                                                                                  | Yes             |
 | STATSD_DAEMON_REPLICAS          | None          | Must be set to 4                                                                                                                     | No              |
 | CARBON_RELAY_REPLICAS           | None          | Number of replicas for carbon relay                                                                                                  | Yes             |
-| GRAPHITE_NODE_REPLICAS          | None          | Can be set to any number. This number affects both carbon relay and graphite master configuration.                                   | Yes             |
-| GRAPHITE_NODE_CURATOR_RETENTION | None          | Set this variable to run a cronjob which deletes metrics that haven't been written for X days                                        | Yes             |
+| GRAPHITE_NODE_REPLICAS          | None          | The number of Graphite data nodes in the cluster. This number affects both carbon relay and graphite master configuration.           | Yes             |
+| GRAPHITE_NODE_CURATOR_RETENTION | None          | Set this variable to run a cronjob which deletes metrics that haven't been written for X days. Leaving it blank will not run the curator     | Yes             |
 | GRAPHITE_MASTER_REPLICAS        | None          | Number of replicas for graphite query node                                                                                           | Yes             |
 
 ## Deployment:
@@ -36,9 +36,9 @@ export DOCKER_REPOSITORY=nanit && \
 export STATSD_PROXY_REPLICAS=3 && \
 export STATSD_DAEMON_REPLICAS=4 && \
 export CARBON_RELAY_REPLICAS=3 && \
-export GRAPHITE_NODE_REPLICAS=7 && \
+export GRAPHITE_NODE_REPLICAS=3 && \
 export GRAPHITE_NODE_CURATOR_RETENTION=5 && \
-export GRAPHITE_MASTER_REPLICAS=2 && \
+export GRAPHITE_MASTER_REPLICAS=1 && \
 export SUDO="" && \
 make deploy
 ```
