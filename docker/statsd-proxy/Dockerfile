@@ -1,5 +1,5 @@
 FROM node:7.5-alpine
-RUN apk add --update git
+RUN apk add --update git bash
 RUN mkdir -p /app
 WORKDIR /app
 RUN git clone https://github.com/etsy/statsd.git
