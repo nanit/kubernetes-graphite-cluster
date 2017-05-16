@@ -6,7 +6,7 @@ run	apt-get -y update
 RUN     apt-get -y update &&\ 
 	apt-get -y install software-properties-common python-django-tagging python-simplejson \
 	python-memcache python-ldap python-cairo python-pysqlite2 python-support python-pip \
-	gunicorn supervisor nginx-light git wget curl build-essential python-dev libffi-dev vim
+	gunicorn supervisor nginx-light git wget curl build-essential python-dev libffi-dev vim jq
 RUN     pip install Twisted==13.2.0
 RUN     pip install pytz
 RUN     git clone https://github.com/graphite-project/whisper.git /src/whisper            &&\
