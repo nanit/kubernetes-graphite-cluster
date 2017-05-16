@@ -1,4 +1,6 @@
 FROM node:7.5-alpine
+ADD entrypoint.sh /
+ADD set-cluster-nodes.sh /
 RUN apk add --update git
 RUN mkdir -p /app
 WORKDIR /app
@@ -9,4 +11,4 @@ COPY proxyConfig.js .
 
 EXPOSE 8125/udp 8126
 
-CMD ["node", "proxy.js", "proxyConfig.js"]
+CMD ["/entrypoint.sh"]

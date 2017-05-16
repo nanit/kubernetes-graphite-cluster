@@ -1,10 +1,5 @@
 {
-nodes: [
-{host: 'statsd-daemon-0.statsd-daemon', port: 8125, adminport: 8126},
-{host: 'statsd-daemon-1.statsd-daemon', port: 8125, adminport: 8126},
-{host: 'statsd-daemon-2.statsd-daemon', port: 8125, adminport: 8126},
-{host: 'statsd-daemon-3.statsd-daemon', port: 8125, adminport: 8126}
-],
+nodes: [@@STATSD_NODES@@],
 server: './servers/udp',
 host:  '0.0.0.0',
 port: 8125,
