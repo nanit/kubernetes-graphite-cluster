@@ -52,7 +52,7 @@ Run `kubectl get pods,statefulsets,svc` and expect to see the following resource
 
 ![K8s resources on a clean cluster](https://github.com/nanit/kubernetes-graphite-cluster/blob/master/K8s-Resources.png)
 
-The numbers from each resource may change according to your environment variables of course.
+The replicas of each resource may change according to your environment variables of course.
 
 
 ## Verifying The Deployment:
