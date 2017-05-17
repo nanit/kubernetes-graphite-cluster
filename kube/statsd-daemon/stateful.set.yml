@@ -4,7 +4,7 @@ metadata:
   name: {{APP_NAME}}
 spec:
   serviceName: {{APP_NAME}}
-  replicas: 4
+  replicas: {{REPLICAS}}
   template:
     metadata:
       labels:

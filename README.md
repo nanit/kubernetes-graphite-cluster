@@ -17,16 +17,16 @@ Find the full details [here](https://medium.com/@erezrabih/creating-a-graphite-c
 4. Optional - Access to your own docker repository to store your own images. That's relevant if you don't want to use the default images offered here.
 
 ## Environment Variables:
-| Name                            | Default Value | Purpose                                                                                                                              | Can be changed? |
-|---------------------------------|---------------|--------------------------------------------------------------------------------------------------------------------------------------|-----------------|
-| DOCKER_REPOSITORY               | nanit         | Change it if you want to build and use custom docker repository. nanit images are public so leaving it as it is should work out of the box. | Yes             |
-| SUDO                            | sudo          | Should docker commands be prefixed with sudo. Change to "" to omit sudo.                                                             | Yes             |
-| STATSD_PROXY_REPLICAS           | None          | Number of replicas for statsd proxy                                                                                                  | Yes             |
-| STATSD_DAEMON_REPLICAS          | None          | Must be set to 4                                                                                                                     | No              |
-| CARBON_RELAY_REPLICAS           | None          | Number of replicas for carbon relay                                                                                                  | Yes             |
-| GRAPHITE_NODE_REPLICAS          | None          | The number of Graphite data nodes in the cluster. This number affects both carbon relay and graphite master configuration.           | Yes             |
-| GRAPHITE_NODE_CURATOR_RETENTION | None          | Set this variable to run a cronjob which deletes metrics that haven't been written for X days. Leaving it blank will not run the curator     | Yes             |
-| GRAPHITE_MASTER_REPLICAS        | None          | Number of replicas for graphite query node                                                                                           | Yes             |
+| Name                            | Default Value | Purpose                                                                                                                              
+|---------------------------------|---------------|--------------------------------------------------------------------------------------------------------------------------------------
+| DOCKER_REPOSITORY               | nanit         | Change it if you want to build and use custom docker repository. nanit images are public so leaving it as it is should work out of the box. 
+| SUDO                            | sudo          | Should docker commands be prefixed with sudo. Change to "" to omit sudo.                                                             
+| STATSD_PROXY_REPLICAS           | None          | Number of replicas for statsd proxy                                                                                                  
+| STATSD_DAEMON_REPLICAS          | None          | Number of StatsD daemons running behind the proxies.                                                                                 
+| CARBON_RELAY_REPLICAS           | None          | Number of replicas for carbon relay                                                                                                  
+| GRAPHITE_NODE_REPLICAS          | None          | The number of Graphite data nodes in the cluster. This number affects both carbon relay and graphite master configuration.           
+| GRAPHITE_NODE_CURATOR_RETENTION | None          | Set this variable to run a cronjob which deletes metrics that haven't been written for X days. Leaving it blank will not run the curator
+| GRAPHITE_MASTER_REPLICAS        | None          | Number of replicas for graphite query node                                                                                           
 
 ## Deployment:
 1. Clone this repository
@@ -34,7 +34,7 @@ Find the full details [here](https://medium.com/@erezrabih/creating-a-graphite-c
 ```
 export DOCKER_REPOSITORY=nanit && \
 export STATSD_PROXY_REPLICAS=3 && \
-export STATSD_DAEMON_REPLICAS=4 && \
+export STATSD_DAEMON_REPLICAS=2 && \
 export CARBON_RELAY_REPLICAS=3 && \
 export GRAPHITE_NODE_REPLICAS=3 && \
 export GRAPHITE_NODE_CURATOR_RETENTION=5 && \
