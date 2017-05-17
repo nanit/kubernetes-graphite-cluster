@@ -70,11 +70,15 @@ When the StatsD proxies start, they fetch all host names of StatsD daemons from 
 Carbon relays and Graphite master nodes do the same for Graphite data nodes. 
 The implications are:
 
-1. A change to STATSD_DAEMON_REPLICAS requires killing all StatsD proxy pods so they fetch the new host names.
+1. A change to **STATSD_DAEMON_REPLICAS** requires killing all StatsD proxy pods so they fetch the new host names.
+
 `kubectl delete pods -l app=statsd` will kill all proxies. The deployment will make sure they come up again with the proper configuration.
-2. A change to GRAPHITE_NODE_REPLICAS requires killing all carbon relays and Graphite master nodes as both of them dynamically fetch Graphite data nodes hostnames.
+
+2. A change to **GRAPHITE_NODE_REPLICAS** requires killing all carbon relays and Graphite master nodes as both of them dynamically fetch Graphite data nodes hostnames.
+
 `kubectl delete pods -l app=carbon-relay`
 `kubectl delete pods -l app=graphite`
+
 Will kill all pods which needs their configuration re-fetched from kuberntes API.
 
 All other replicas - STATSD_PROXY_REPLICAS, CARBON_RELAY_REPLICAS and GRAPHITE_MASTER_REPLICAS may be changed without additional action needed.
