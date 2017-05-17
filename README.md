@@ -50,7 +50,7 @@ After the deployment is done there are two endpoints of interest:
 
 Generally, these are the resources you expect to see on a clean K8s installations:
 
-![K8s resources on a clean cluster]
+![K8s resources on a clean cluster](https://github.com/nanit/kubernetes-graphite-cluster/blob/master/K8s-Resources.png)
 
 
 ## Verifying The Deployment:
