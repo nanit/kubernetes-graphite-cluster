@@ -77,6 +77,7 @@ The implications are:
 2. A change to **GRAPHITE_NODE_REPLICAS** requires killing all carbon relays and Graphite master nodes as both of them dynamically fetch Graphite data nodes hostnames.
 
 `kubectl delete pods -l app=carbon-relay`
+
 `kubectl delete pods -l app=graphite`
 
 Will kill all pods which needs their configuration re-fetched from kuberntes API.
