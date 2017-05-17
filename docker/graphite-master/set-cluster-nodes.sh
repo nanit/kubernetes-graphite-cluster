@@ -14,7 +14,7 @@ NODES=()
 
 for i in $(seq 0 $REPLICAS)
 do
-  NODES+=("\"graphite-node-$i.graphite-node:80\"")
+  NODES+=("\"graphite-node-$i.$SERVICE_NAME:80\"")
 done
 
 JOINED=$(join_by , "${NODES[@]}")

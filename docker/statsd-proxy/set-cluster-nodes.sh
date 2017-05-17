@@ -14,7 +14,7 @@ NODES=()
 
 for i in $(seq 0 $REPLICAS)
 do
-  NODES+=("{host: 'statsd-daemon-$i.statsd-daemon', port: 8125, adminport:8126}")
+  NODES+=("{host: 'statsd-daemon-$i.$SERVICE_NAME', port: 8125, adminport:8126}")
 done
 
 JOINED=$(join_by , "${NODES[@]}")
