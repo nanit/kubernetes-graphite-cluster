@@ -48,7 +48,7 @@ After the deployment is done there are two endpoints of interest:
 1. **statsd:8125** is the host for your metrics collection. It points the statsd proxies.
 2. **graphite:80** is the host for you metrics queries. It points to the graphite query node which queries all data nodes in the cluster.
 
-Generally, these are the resources you expect to see on a clean K8s installations:
+Run `kubectl get pods,statefulsets,svc` and expect to see the following resources:
 
 ![K8s resources on a clean cluster](https://github.com/nanit/kubernetes-graphite-cluster/blob/master/K8s-Resources.png)
 
