@@ -82,7 +82,7 @@ The implications are:
 
 Will kill all pods which needs their configuration re-fetched from kuberntes API.
 
-All other replicas - STATSD_PROXY_REPLICAS, CARBON_RELAY_REPLICAS and GRAPHITE_MASTER_REPLICAS may be changed without additional action needed.
+All other replicas - **STATSD_PROXY_REPLICAS**, **CARBON_RELAY_REPLICAS** and **GRAPHITE_MASTER_REPLICAS** may be changed without additional action needed.
 
 ## Acknowledgement
 
