@@ -44,6 +44,7 @@ run	touch /opt/graphite/storage/graphite.db /opt/graphite/storage/index
 run	chmod 0775 /opt/graphite/storage /opt/graphite/storage/whisper
 run	chmod 0664 /opt/graphite/storage/graphite.db
 run cp /src/graphite-web/webapp/manage.py /opt/graphite/webapp
+run	cd /opt/graphite/webapp/ && python manage.py migrate --run-syncdb --noinput
 
 # Nginx
 expose	80
