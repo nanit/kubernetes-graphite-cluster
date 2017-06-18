@@ -12,6 +12,7 @@ REPLICAS=$(echo $STATSD_NODES_SS | jq .spec.replicas)
 SERVICE_NAME=$(echo $STATSD_NODES_SS | jq .spec.serviceName | tr -d '"')
 (( REPLICAS-= 1 ))
 NODES=()
+echo "EREZ"
 
 for i in $(seq 0 $REPLICAS)
 do
@@ -21,3 +22,9 @@ done
 JOINED=$(join_by , "${NODES[@]}")
 
 sed -i "s/@@STATSD_NODES@@/$JOINED/g" /app/statsd/proxyConfig.js
+
+for i in $(seq 0 $REPLICAS)
+do
+  echo "erez"
+  echo $i
+done
