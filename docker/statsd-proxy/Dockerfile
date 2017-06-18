@@ -1,4 +1,4 @@
-FROM node:7.10-alpine
+FROM node:8-alpine
 RUN apk add --update git bash curl jq
 RUN mkdir -p /app
 WORKDIR /app
