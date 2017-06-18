@@ -11,8 +11,8 @@ STATSD_NODES_SS=$(echo $STATEFUL_SETS | jq '.items[] | select(.metadata.name == 
 REPLICAS=$(echo $STATSD_NODES_SS | jq .spec.replicas)
 SERVICE_NAME=$(echo $STATSD_NODES_SS | jq .spec.serviceName | tr -d '"')
 (( REPLICAS-= 1 ))
-NODES=()
 echo "Building nodes list"
+NODES=()
 
 for i in $(seq 0 $REPLICAS)
 do
