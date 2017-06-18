@@ -22,9 +22,3 @@ done
 JOINED=$(join_by , "${NODES[@]}")
 
 sed -i "s/@@STATSD_NODES@@/$JOINED/g" /app/statsd/proxyConfig.js
-
-for i in $(seq 0 $REPLICAS)
-do
-  echo "erez"
-  echo $i
-done
