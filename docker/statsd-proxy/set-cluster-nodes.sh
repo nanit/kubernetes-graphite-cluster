@@ -12,7 +12,7 @@ REPLICAS=$(echo $STATSD_NODES_SS | jq .spec.replicas)
 SERVICE_NAME=$(echo $STATSD_NODES_SS | jq .spec.serviceName | tr -d '"')
 (( REPLICAS-= 1 ))
 NODES=()
-echo "EREZ"
+echo "Building nodes list"
 
 for i in $(seq 0 $REPLICAS)
 do
