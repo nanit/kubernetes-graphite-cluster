@@ -10,6 +10,7 @@ STATEFUL_SETS=$(curl -f -k https://kubernetes/apis/apps/v1beta1/statefulsets -H 
 STATSD_NODES_SS=$(echo $STATEFUL_SETS | jq '.items[] | select(.metadata.name == "statsd-daemon")')
 REPLICAS=$(echo $STATSD_NODES_SS | jq .spec.replicas)
 SERVICE_NAME=$(echo $STATSD_NODES_SS | jq .spec.serviceName | tr -d '"')
+echo "Decreasing replicas"
 (( REPLICAS-= 1 ))
 echo "Building nodes list"
 NODES=()
