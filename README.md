@@ -1,6 +1,6 @@
 # kubernetes-graphite-cluster
 
-A ready to deploy graphite cluster to work on top of Kubernetes.
+A deployment-ready graphite cluster on top of Kubernetes.
 Find the full details [here](https://medium.com/@erezrabih/creating-a-graphite-cluster-on-kubernetes-6b402a8a7438#.yyaz16gzq)
 
 ## Contents:
