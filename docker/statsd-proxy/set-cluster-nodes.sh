@@ -2,6 +2,7 @@
 
 set -e
 set -u
+set -x
 
 function join_by { local IFS="$1"; shift; echo "$*"; }
 
