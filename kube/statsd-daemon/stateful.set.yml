@@ -8,6 +8,7 @@ spec:
   template:
     metadata:
       labels:
+        component: graphite
         app: {{APP_NAME}}
     spec:
       terminationGracePeriodSeconds: 10
