@@ -1,5 +1,5 @@
 {
-nodes: [{host: '100.97.41.28', port: 8125, adminport:8126}],
+nodes: [@@STATSD_NODES@@],
 server: './servers/udp',
 host:  '0.0.0.0',
 port: 8125,
