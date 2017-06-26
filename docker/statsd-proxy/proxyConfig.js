@@ -1,7 +1,7 @@
 {
 nodes: [
-  {host: '100.97.41.28', port: 8125, adminport:8126}
-  {host: '100.97.42.26', port: 8125, adminport:8126}
+  {host: '100.97.41.28', port: 8125, adminport:8126},
+  {host: '100.97.42.26', port: 8125, adminport:8126},
   {host: '100.97.1.76', port: 8125, adminport:8126}
 ],
 server: './servers/udp',
