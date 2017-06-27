@@ -1,13 +1,12 @@
 from	ubuntu:14.04
 run	echo 'deb http://us.archive.ubuntu.com/ubuntu/ trusty universe' >> /etc/apt/sources.list
-run curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-run	apt-get -y update
-
 # Install required packages
 RUN     apt-get -y update &&\ 
 	apt-get -y install software-properties-common python-django-tagging python-simplejson \
 	python-memcache python-ldap python-cairo python-pysqlite2 python-support python-pip \
-	gunicorn supervisor nginx-light git wget curl build-essential python-dev libffi-dev vim jq nodejs
+	gunicorn supervisor nginx-light git wget curl build-essential python-dev libffi-dev vim jq
+run curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+run apt-get install -y nodejs
 RUN     pip install Twisted==13.2.0
 RUN     pip install pytz
 RUN     git clone https://github.com/graphite-project/whisper.git /src/whisper            &&\
