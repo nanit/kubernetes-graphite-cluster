@@ -10,7 +10,8 @@
     "watch": true,
     "watchDirectory": "/opt/graphite/conf",
     "command": "python",
-    "script": "/opt/graphite/bin/carbon-relay.py",
+    "sourceDir": "/opt/graphite/bin/",
+    "script": "carbon-relay.py",
     "args": ["--debug", "start"]
   }
 ]
