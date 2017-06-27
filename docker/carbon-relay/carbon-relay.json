@@ -8,9 +8,10 @@
     "uid": "carbon-relay",
     "append": true,
     "watch": true,
-    "command": "/opt/graphite/bin/carbon-relay.py",
-    "script": "start",
-    "args": ["--debug", "--logdir=/var/log/carbon"]
+    "watchDirectory": "/opt/graphite/conf",
+    "command": "python",
+    "script": "/opt/graphite/bin/carbon-relay.py",
+    "args": ["--debug", "--logdir=/var/log/carbon", "start"]
   }
 ]
 
