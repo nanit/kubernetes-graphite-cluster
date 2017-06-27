@@ -2,7 +2,7 @@
   {
     "uid": "kube-watch",
     "append": true,
-    "script": "/forever/kube-watch.js"
+    "script": "kube-watch.js"
   },
   {
     "uid": "carbon-relay",
