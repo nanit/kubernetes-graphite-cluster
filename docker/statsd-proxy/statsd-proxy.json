@@ -1,0 +1,14 @@
+[
+  {
+    "uid": "kube-watch",
+    "append": true,
+    "script": "kube-watch.js"
+  },
+  {
+    "uid": "statsd-proxy",
+    "append": true,
+    "watch": true,
+    "script": "proxy.js",
+    "args": ["proxyConfig.js"]
+  }
+]
