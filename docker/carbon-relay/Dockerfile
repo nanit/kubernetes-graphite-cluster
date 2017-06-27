@@ -24,6 +24,7 @@ add conf/carbon.conf.template /opt/graphite/conf/carbon.conf.template
 add conf/storage-schemas.conf /opt/graphite/conf/storage-schemas.conf
 
 RUN mkdir /forever
+RUN npm install -g forever hashring kubernetes-client json-stream
 add carbon-relay.json /forever/
 add kube-watch.js /forever/
 
