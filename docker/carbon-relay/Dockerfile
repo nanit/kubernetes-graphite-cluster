@@ -1,12 +1,13 @@
 from	ubuntu:14.04
 run	echo 'deb http://us.archive.ubuntu.com/ubuntu/ trusty universe' >> /etc/apt/sources.list
+run curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
 run	apt-get -y update
 
 # Install required packages
 RUN     apt-get -y update &&\ 
 	apt-get -y install software-properties-common python-django-tagging python-simplejson \
 	python-memcache python-ldap python-cairo python-pysqlite2 python-support python-pip \
-	gunicorn supervisor nginx-light git wget curl build-essential python-dev libffi-dev vim jq
+	gunicorn supervisor nginx-light git wget curl build-essential python-dev libffi-dev vim jq nodejs
 RUN     pip install Twisted==13.2.0
 RUN     pip install pytz
 RUN     git clone https://github.com/graphite-project/whisper.git /src/whisper            &&\
@@ -20,11 +21,13 @@ RUN     git clone https://github.com/graphite-project/carbon.git /src/carbon    
         python setup.py install
 
 
-add conf/carbon.conf /opt/graphite/conf/carbon.conf
+add conf/carbon.conf.template /opt/graphite/conf/carbon.conf.template
 add conf/storage-schemas.conf /opt/graphite/conf/storage-schemas.conf
-add set-cluster-nodes.sh /set-cluster-nodes.sh
-add entrypoint.sh /entrypoint.sh
+
+RUN mkdir /forever
+add carbon-relay.json /forever/
+add kube-watch.js /forever/
 
 EXPOSE 2003
 
-CMD ["/entrypoint.sh"]
+CMD ["forever", "/forever/carbon-relay.json"]

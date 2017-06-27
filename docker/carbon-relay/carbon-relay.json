@@ -1,0 +1,16 @@
+[
+  {
+    "uid": "kube-watch",
+    "append": true,
+    "script": "/forever/kube-watch.js"
+  },
+  {
+    "uid": "carbon-relay",
+    "append": true,
+    "watch": true,
+    "command": "/opt/graphite/bin/carbon-relay.py",
+    "script": "start",
+    "args": ["--debug", "--logdir=/var/log/carbon"]
+  }
+]
+
