@@ -10,4 +10,4 @@ COPY * ./
 
 EXPOSE 8125/udp 8126
 
-CMD ["forever", "start", "statsd-proxy.json"]
+CMD ["forever", "statsd-proxy.json"]
