@@ -6,12 +6,12 @@ const fs = require('fs')
 const configFileTemplate="/opt/graphite/conf/carbon.conf.template";
 const configFileTarget="/opt/graphite/conf/carbon.conf";
 const core = new Api.Core(Api.config.getInCluster());
-const configTemplate = fs.readFileSync(configFileTemplate);
+const configTemplate = fs.readFileSync(configFileTemplate, 'utf8');
 
 function changeConfig(endpoints) {
   nodes = endpoints.subsets[0].addresses.map(e => (e.ip + ":2004")).join(",");
   var result = configTemplate.replace(/@@GRAPHITE_NODES@@/g, nodes);
-  fs.writeFileSync(configFilePath, result);
+  fs.writeFileSync(configFileTarget, result);
 }
 
 core.ns.endpoints.get('graphite-node', function(err, result) {
