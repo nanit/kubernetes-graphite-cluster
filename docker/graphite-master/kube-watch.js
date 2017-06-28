@@ -4,9 +4,9 @@ const Api = require('kubernetes-client');
 const kube = new Api.Core(Api.config.getInCluster());
 const JSONStream = require('json-stream');
 const jsonStream = new JSONStream();
-const configFileTemplate="/opt/graphite/conf/carbon.conf.template";
-const configFileTarget="/opt/graphite/conf/carbon.conf";
-const processToRestart="carbon-relay"
+const configFileTemplate="/opt/graphite/webapp/graphite/local_settings.py.template";
+const configFileTarget="/opt/graphite/webapp/graphite/local_settings.py";
+const processToRestart="graphite-webapp"
 const configTemplate = fs.readFileSync(configFileTemplate, 'utf8');
 const exec = require('child_process').exec;
 
@@ -17,7 +17,7 @@ function restartProcess() {
 }
 
 function changeConfig(endpoints) {
-  nodes = endpoints.subsets[0].addresses.map(e => (e.ip + ":2004")).join(",");
+  nodes = endpoints.subsets[0].addresses.map(e => `"${(e.ip + ':80')}"`).join(",");
   var result = configTemplate.replace(/@@GRAPHITE_NODES@@/g, nodes);
   fs.writeFileSync(configFileTarget, result);
   restartProcess()
@@ -34,3 +34,4 @@ jsonStream.on('data', obj => {
   console.log('Received update:', JSON.stringify(obj, null, 2));
   changeConfig(obj.object);
 });
+

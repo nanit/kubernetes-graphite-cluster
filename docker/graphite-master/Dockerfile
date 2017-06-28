@@ -7,6 +7,8 @@ RUN     apt-get -y update &&\
 	apt-get -y install software-properties-common python-django-tagging python-simplejson \
 	python-memcache python-ldap python-cairo python-pysqlite2 python-support python-pip \
 	gunicorn supervisor nginx-light git wget curl build-essential python-dev libffi-dev vim jq
+run curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+run apt-get install -y nodejs
 RUN     pip install Twisted==13.2.0
 RUN     pip install pytz
 RUN     git clone https://github.com/graphite-project/whisper.git /src/whisper            &&\
@@ -33,18 +35,21 @@ add	./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Add graphite config
 add	./webapp/initial_data.json /opt/graphite/webapp/graphite/initial_data.json
-add	./webapp/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
+add	./webapp/local_settings.py.template /opt/graphite/webapp/graphite/local_settings.py.template
 add	./conf/carbon.conf /opt/graphite/conf/carbon.conf
 add	./conf/storage-schemas.conf /opt/graphite/conf/storage-schemas.conf
 add	./conf/storage-aggregation.conf /opt/graphite/conf/storage-aggregation.conf
-add set-cluster-nodes.sh /set-cluster-nodes.sh
-add entrypoint.sh /entrypoint.sh
 run	mkdir -p /opt/graphite/storage/whisper
 run	touch /opt/graphite/storage/graphite.db /opt/graphite/storage/index
 run	chmod 0775 /opt/graphite/storage /opt/graphite/storage/whisper
 run	chmod 0664 /opt/graphite/storage/graphite.db
 run cp /src/graphite-web/webapp/manage.py /opt/graphite/webapp
 
+RUN mkdir /kube-watch
+RUN cd /kube-watch && npm install hashring kubernetes-client json-stream
+add kube-watch.js /kube-watch/kube-watch.js
+
+add entrypoint.sh /entrypoint.sh
 # Nginx
 expose	80
 # Carbon line receiver port
