@@ -13,7 +13,7 @@ Find the full details [here](https://medium.com/@erezrabih/creating-a-graphite-c
 ## Requirements:
 1. Kubernetes version 1.5.X (We're using StatefulSet)
 2. kubectl configured to work with your Kubernetes API
-3. Tested on Kubernetes 1.5.2 on top of AWS/[GKE](https://github.com/nanit/kubernetes-graphite-cluster/issues/6)
+3. Tested on Kubernetes 1.5.X/1.6.X (Without RBAC) on top of AWS/[GKE](https://github.com/nanit/kubernetes-graphite-cluster/issues/6)
 4. Optional - Access to your own docker repository to store your own images. That's relevant if you don't want to use the default images offered here.
 
 ## Environment Variables:
@@ -74,23 +74,10 @@ It will build the images, push them to your docker repository and use them to cr
 ## Changing an active cluster configuration
 
 Graphite nodes and StatsD daemons are deployed as StatefulSets.
-When the StatsD proxies start, they fetch all host names of StatsD daemons from the kubernetes API. 
-Carbon relays and Graphite master nodes do the same for Graphite data nodes. 
+The StatsD proxies continuously query the Kubernetes API for StatsD daemon endpoints and updates the configuration. 
+Both Graphite master and carbon relays continuously query the Kubernetes API for Graphite nodes endpoints and update the configuration.
 The implications are:
 
-1. A change to **STATSD_DAEMON_REPLICAS** requires killing all StatsD proxy pods so they fetch the new host names.
-
-`kubectl delete pods -l app=statsd` will kill all proxies. The deployment will make sure they come up again with the proper configuration.
-
-2. A change to **GRAPHITE_NODE_REPLICAS** requires killing all carbon relays and Graphite master nodes as both of them dynamically fetch Graphite data nodes hostnames.
-
-`kubectl delete pods -l app=carbon-relay`
-
-`kubectl delete pods -l app=graphite`
-
-Will kill all pods which needs their configuration re-fetched from kuberntes API.
-
-All other replicas - **STATSD_PROXY_REPLICAS**, **CARBON_RELAY_REPLICAS** and **GRAPHITE_MASTER_REPLICAS** may be changed without additional action needed.
 
 ## Acknowledgement
 
