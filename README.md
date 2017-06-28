@@ -60,7 +60,7 @@ The replicas of each resource may change according to your environment variables
 ## Verifying The Deployment:
 To verify everything works as expected:
 
-1. Enter an interactive shell session in one of the pods: `kubectl exec -it statsd-daemon-0 /bin/sh`
+1. Enter an interactive shell session in one of the pods: `kubectl exec -it statsd-daemon-XXXXX-XXXX /bin/sh`
 2. run `echo "test_counter:1|c" | nc -w1 -u statsd 8125` a few times to get some data into Graphite
 3. Install curl `apk --update add curl`
 4. Fetch data from Graphite: `curl 'graphite/render?target=stats.counters.test_counter.count&from=-10min&format=json'`
