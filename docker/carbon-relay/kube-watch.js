@@ -16,9 +16,16 @@ function restartProcess() {
       err: ${stderr}`)})
 }
 
+function getNodes(endpoints) {
+  if (endpoints.subsets.length > 0) {
+    return endpoints.subsets[0].addresses.map(e => (e.ip + ":2004")).join(",");
+  } else {
+    return "";
+  }
+}
+
 function changeConfig(endpoints) {
-  nodes = endpoints.subsets[0].addresses.map(e => (e.ip + ":2004")).join(",");
-  var result = configTemplate.replace(/@@GRAPHITE_NODES@@/g, nodes);
+  var result = configTemplate.replace(/@@GRAPHITE_NODES@@/g, getNodes(endpoints));
   fs.writeFileSync(configFileTarget, result);
   restartProcess()
 }
