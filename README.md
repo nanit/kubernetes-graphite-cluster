@@ -58,13 +58,25 @@ The replicas of each resource may change according to your environment variables
 
 
 ## Verifying The Deployment:
-To verify everything works as expected:
+To verify everything works as expected just paste the following into your terminal:
 
-1. Enter an interactive shell session in one of the pods: `kubectl exec -it statsd-daemon-XXXXX-XXXX /bin/sh`
-2. run `echo "test_counter:1|c" | nc -w1 -u statsd 8125` a few times to get some data into Graphite
-3. Install curl `apk --update add curl`
-4. Fetch data from Graphite: `curl 'graphite/render?target=stats.counters.test_counter.count&from=-10min&format=json'`
-
+```
+POD_NAME=$(kubectl get pods -l app=statsd -o jsonpath="{.items[0].metadata.name}")
+kubectl exec -it $POD_NAME bash 
+echo "test_counter:1|c" | nc -w1 -u statsd 8125
+sleep 2
+echo "test_counter:1|c" | nc -w1 -u statsd 8125
+sleep 2
+echo "test_counter:1|c" | nc -w1 -u statsd 8125
+sleep 2
+echo "test_counter:1|c" | nc -w1 -u statsd 8125
+sleep 2
+echo "test_counter:1|c" | nc -w1 -u statsd 8125
+sleep 2
+echo "test_counter:1|c" | nc -w1 -u statsd 8125
+apk --update add curl
+curl 'graphite/render?target=stats.counters.test_counter.count&from=-10min&format=json'
+```
 You should see a lot of null values along with your few increments at the end.
 
 ## Building your own images
