@@ -63,17 +63,12 @@ To verify everything works as expected just paste the following into your termin
 ```
 POD_NAME=$(kubectl get pods -l app=statsd -o jsonpath="{.items[0].metadata.name}")
 kubectl exec -it $POD_NAME bash 
-echo "test_counter:1|c" | nc -w1 -u statsd 8125
-sleep 2
-echo "test_counter:1|c" | nc -w1 -u statsd 8125
-sleep 2
-echo "test_counter:1|c" | nc -w1 -u statsd 8125
-sleep 2
-echo "test_counter:1|c" | nc -w1 -u statsd 8125
-sleep 2
-echo "test_counter:1|c" | nc -w1 -u statsd 8125
-sleep 2
-echo "test_counter:1|c" | nc -w1 -u statsd 8125
+for i in {1..10}
+do
+  echo "test_counter:1|c" | nc -w1 -u statsd 8125
+  sleep 1
+done
+
 apk --update add curl
 curl 'graphite/render?target=stats.counters.test_counter.count&from=-10min&format=json'
 ```
