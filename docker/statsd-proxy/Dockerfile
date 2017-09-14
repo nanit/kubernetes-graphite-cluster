@@ -4,11 +4,10 @@ RUN mkdir -p /app
 WORKDIR /app
 RUN git clone https://github.com/etsy/statsd.git
 WORKDIR /app/statsd
-RUN npm install hashring --save
-ADD entrypoint.sh /entrypoint.sh
-ADD set-cluster-nodes.sh /set-cluster-nodes.sh
-COPY proxyConfig.js .
+RUN npm install -g forever
+RUN npm install hashring kubernetes-client json-stream --save
+COPY * ./
 
 EXPOSE 8125/udp 8126
 
-CMD ["/entrypoint.sh"]
+CMD ["forever", "statsd-proxy.json"]

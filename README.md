@@ -5,7 +5,7 @@ Find the full details [here](https://medium.com/@erezrabih/creating-a-graphite-c
 
 ## Contents:
 1. A **statsd proxy** deployment and service for metric collection
-2. A **statsd daemon** stateful set for metric aggregation and shipping
+2. A **statsd daemon** deployment and service for metric aggregation and shipping
 2. **Carbon relay** deployment and service to spread metrics across several Graphite data nodes
 3. **Graphite data nodes** as a stateful set with persistent volumes
 4. **Graphite query node** to be used as a query gateway to the data nodes
@@ -13,7 +13,7 @@ Find the full details [here](https://medium.com/@erezrabih/creating-a-graphite-c
 ## Requirements:
 1. Kubernetes version 1.5.X (We're using StatefulSet)
 2. kubectl configured to work with your Kubernetes API
-3. Tested on Kubernetes 1.5.2 on top of AWS/[GKE](https://github.com/nanit/kubernetes-graphite-cluster/issues/6)
+3. Tested on Kubernetes 1.5.X/1.6.X (Without RBAC) on top of AWS/[GKE](https://github.com/nanit/kubernetes-graphite-cluster/issues/6)
 4. Optional - Access to your own docker repository to store your own images. That's relevant if you don't want to use the default images offered here.
 
 ## Environment Variables:
@@ -60,7 +60,7 @@ The replicas of each resource may change according to your environment variables
 ## Verifying The Deployment:
 To verify everything works as expected:
 
-1. Enter an interactive shell session in one of the pods: `kubectl exec -it statsd-daemon-0 /bin/sh`
+1. Enter an interactive shell session in one of the pods: `kubectl exec -it statsd-daemon-XXXXX-XXXX /bin/sh`
 2. run `echo "test_counter:1|c" | nc -w1 -u statsd 8125` a few times to get some data into Graphite
 3. Install curl `apk --update add curl`
 4. Fetch data from Graphite: `curl 'graphite/render?target=stats.counters.test_counter.count&from=-10min&format=json'`
@@ -74,23 +74,10 @@ It will build the images, push them to your docker repository and use them to cr
 ## Changing an active cluster configuration
 
 Graphite nodes and StatsD daemons are deployed as StatefulSets.
-When the StatsD proxies start, they fetch all host names of StatsD daemons from the kubernetes API. 
-Carbon relays and Graphite master nodes do the same for Graphite data nodes. 
-The implications are:
+The StatsD proxies continuously watch the Kubernetes API for StatsD daemon endpoints and updates the configuration. 
+Both Graphite master and carbon relays continuously watch the Kubernetes API for Graphite nodes endpoints and update the configuration.
 
-1. A change to **STATSD_DAEMON_REPLICAS** requires killing all StatsD proxy pods so they fetch the new host names.
-
-`kubectl delete pods -l app=statsd` will kill all proxies. The deployment will make sure they come up again with the proper configuration.
-
-2. A change to **GRAPHITE_NODE_REPLICAS** requires killing all carbon relays and Graphite master nodes as both of them dynamically fetch Graphite data nodes hostnames.
-
-`kubectl delete pods -l app=carbon-relay`
-
-`kubectl delete pods -l app=graphite`
-
-Will kill all pods which needs their configuration re-fetched from kuberntes API.
-
-All other replicas - **STATSD_PROXY_REPLICAS**, **CARBON_RELAY_REPLICAS** and **GRAPHITE_MASTER_REPLICAS** may be changed without additional action needed.
+That means you can scale each part independently, and the system reacts to your changes by updating its config file accordingly.
 
 ## Acknowledgement
 
