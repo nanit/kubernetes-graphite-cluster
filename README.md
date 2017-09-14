@@ -74,10 +74,10 @@ It will build the images, push them to your docker repository and use them to cr
 ## Changing an active cluster configuration
 
 Graphite nodes and StatsD daemons are deployed as StatefulSets.
-The StatsD proxies continuously query the Kubernetes API for StatsD daemon endpoints and updates the configuration. 
-Both Graphite master and carbon relays continuously query the Kubernetes API for Graphite nodes endpoints and update the configuration.
-The implications are:
+The StatsD proxies continuously watch the Kubernetes API for StatsD daemon endpoints and updates the configuration. 
+Both Graphite master and carbon relays continuously watch the Kubernetes API for Graphite nodes endpoints and update the configuration.
 
+That means you can scale each part independently, and the system reacts to your changes by updating its config file accordingly.
 
 ## Acknowledgement
 
