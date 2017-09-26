@@ -18,6 +18,10 @@ spec:
         env:
           - name: CURATOR_RETENTION
             value: "{{CURATOR_RETENTION}}"
+        resources:
+          requests:
+            cpu: 700m
+            memory: 6Gi
         ports:
         - containerPort: 80
           name: http
