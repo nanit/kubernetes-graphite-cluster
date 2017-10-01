@@ -81,6 +81,7 @@ GRAPHITE_NODE_IMAGE_NAME=$(DOCKER_REPOSITORY)/$(GRAPHITE_NODE_APP_NAME):$(GRAPHI
 GRAPHITE_NODE_REPLICAS?=$(shell curl -s config/$(NANIT_ENV)/$(GRAPHITE_NODE_APP_NAME)/replicas)
 GRAPHITE_NODE_DISK_SIZE?=$(shell curl -s config/$(NANIT_ENV)/$(GRAPHITE_NODE_APP_NAME)/disk_size)
 GRAPHITE_NODE_CURATOR_RETENTION?=$(shell curl -s config/$(NANIT_ENV)/$(GRAPHITE_NODE_APP_NAME)/curator_retention)
+GRAPHITE_NODE_STORAGE_CLASS?=$(shell curl -s config/$(NANIT_ENV)/$(GRAPHITE_NODE_APP_NAME)/storage_class)
 
 define generate-graphite-node-svc
 	sed -e 's/{{APP_NAME}}/$(GRAPHITE_NODE_APP_NAME)/g' kube/$(GRAPHITE_NODE_DIR_NAME)/svc.yml
@@ -89,7 +90,8 @@ endef
 define generate-graphite-node-dep
 	if [ -z "$(GRAPHITE_NODE_REPLICAS)" ]; then echo "ERROR: GRAPHITE_NODE_REPLICAS is empty!"; exit 1; fi
 	if [ -z "$(GRAPHITE_NODE_DISK_SIZE)" ]; then echo "ERROR: GRAPHITE_NODE_DISK_SIZE is empty!"; exit 1; fi
-	sed -e 's/{{APP_NAME}}/$(GRAPHITE_NODE_APP_NAME)/g;s,{{IMAGE_NAME}},$(GRAPHITE_NODE_IMAGE_NAME),g;s/{{REPLICAS}}/$(GRAPHITE_NODE_REPLICAS)/g;s/{{CURATOR_RETENTION}}/$(GRAPHITE_NODE_CURATOR_RETENTION)/g;s/{{DISK_SIZE}}/$(GRAPHITE_NODE_DISK_SIZE)/g' kube/$(GRAPHITE_NODE_DIR_NAME)/stateful.set.yml
+	if [ -z "$(GRAPHITE_NODE_STORAGE_CLASS)" ]; then echo "ERROR: GRAPHITE_NODE_STORAGE_CLASS is empty!"; exit 1; fi
+	sed -e 's/{{APP_NAME}}/$(GRAPHITE_NODE_APP_NAME)/g;s,{{GRAPHITE_NODE_STORAGE_CLASS}},$(GRAPHITE_NODE_STORAGE_CLASS)/g;s,{{IMAGE_NAME}},$(GRAPHITE_NODE_IMAGE_NAME),g;s/{{REPLICAS}}/$(GRAPHITE_NODE_REPLICAS)/g;s/{{CURATOR_RETENTION}}/$(GRAPHITE_NODE_CURATOR_RETENTION)/g;s/{{DISK_SIZE}}/$(GRAPHITE_NODE_DISK_SIZE)/g' kube/$(GRAPHITE_NODE_DIR_NAME)/stateful.set.yml
 endef
 
 deploy-graphite-node: docker-graphite-node
