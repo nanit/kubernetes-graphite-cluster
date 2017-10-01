@@ -37,6 +37,7 @@ spec:
       name: graphite-node-pv
     spec:
       accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "{{STORAGE_CLASS}}"
       resources:
         requests:
           storage: "{{DISK_SIZE}}"

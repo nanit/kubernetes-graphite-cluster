@@ -27,6 +27,7 @@ Find the full details [here](https://medium.com/@erezrabih/creating-a-graphite-c
 | GRAPHITE_NODE_REPLICAS          | None          | The number of Graphite data nodes in the cluster. This number affects both carbon relay and graphite master configuration.           
 | GRAPHITE_NODE_DISK_SIZE         | None          | The size of the persistent disk to be allocated for each Graphite node. 
 | GRAPHITE_NODE_CURATOR_RETENTION | None          | Set this variable to run a cronjob which deletes metrics that haven't been written for X days. Leaving it blank will not run the curator
+| GRAPHITE_NODE_STORAGE_CLASS     | None          | The storage class for the persistent volumen claims of the Graphite node stateful set
 | GRAPHITE_MASTER_REPLICAS        | None          | Number of replicas for graphite query node                                                                                           
 
 ## Deployment:
@@ -41,6 +42,7 @@ export GRAPHITE_NODE_REPLICAS=3 && \
 export GRAPHITE_NODE_DISK_SIZE=30G && \
 export GRAPHITE_NODE_CURATOR_RETENTION=5 && \
 export GRAPHITE_MASTER_REPLICAS=1 && \
+export GRAPHITE_NODE_STORAGE_CLASS=default && \
 export SUDO="" && \
 make deploy
 ```
