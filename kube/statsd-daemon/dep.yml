@@ -15,8 +15,8 @@ spec:
           image: {{IMAGE_NAME}}
           resources:
             requests:
-              cpu: 200m
-              memory: 128Mi
+              cpu: 500m
+              memory: 256Mi
           ports:
           - containerPort: 8125
             name: incoming-udp

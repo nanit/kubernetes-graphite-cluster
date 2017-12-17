@@ -4,6 +4,7 @@ metadata:
   name: {{APP_NAME}}
 spec:
   serviceName: {{APP_NAME}}
+  podManagementPolicy: Parallel
   replicas: {{REPLICAS}}
   template:
     metadata:
