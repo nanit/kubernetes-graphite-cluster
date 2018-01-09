@@ -148,4 +148,4 @@ clean-graphite-master:
 
 deploy: deploy-graphite-node deploy-statsd-daemon deploy-statsd-proxy deploy-carbon-relay deploy-graphite-master
 
-clean: clean-statsd-proxy clean-statsd-daemon-clean-carbon-relay-clean-graphite-node clean-graphite-master
+clean: clean-statsd-proxy clean-statsd-daemon clean-carbon-relay clean-graphite-node clean-graphite-master
