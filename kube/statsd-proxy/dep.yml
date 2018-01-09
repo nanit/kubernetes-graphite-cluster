@@ -21,3 +21,4 @@ spec:
           - containerPort: 8125
             name: incoming-udp
             protocol: UDP
+      {{ADDITIONAL_YAML}}

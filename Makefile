@@ -7,6 +7,7 @@ STATSD_PROXY_DOCKER_DIR=docker/$(STATSD_PROXY_DIR_NAME)
 STATSD_PROXY_IMAGE_TAG=$(shell git log -n 1 --pretty=format:%h $(STATSD_PROXY_DOCKER_DIR))
 STATSD_PROXY_IMAGE_NAME=$(DOCKER_REPOSITORY)/$(STATSD_PROXY_APP_NAME):$(STATSD_PROXY_IMAGE_TAG)
 STATSD_PROXY_REPLICAS?=$(shell curl -s config/$(NANIT_ENV)/$(STATSD_PROXY_APP_NAME)/replicas)
+STATSD_PROXY_ADDITIONAL_YAML?=$(shell curl -s config/$(NANIT_ENV)/$(STATSD_PROXY_APP_NAME)/additional_yaml)
 
 define generate-statsd-proxy-svc
 	sed -e 's/{{APP_NAME}}/$(STATSD_PROXY_APP_NAME)/g' kube/$(STATSD_PROXY_DIR_NAME)/svc.yml
@@ -14,7 +15,7 @@ endef
 
 define generate-statsd-proxy-dep
 	if [ -z "$(STATSD_PROXY_REPLICAS)" ]; then echo "ERROR: STATSD_PROXY_REPLICAS is empty!"; exit 1; fi
-	sed -e 's/{{APP_NAME}}/$(STATSD_PROXY_APP_NAME)/g;s,{{IMAGE_NAME}},$(STATSD_PROXY_IMAGE_NAME),g;s/{{REPLICAS}}/$(STATSD_PROXY_REPLICAS)/g' kube/$(STATSD_PROXY_DIR_NAME)/dep.yml
+	sed -e 's/{{APP_NAME}}/$(STATSD_PROXY_APP_NAME)/g;s,{{IMAGE_NAME}},$(STATSD_PROXY_IMAGE_NAME),g;s/{{REPLICAS}}/$(STATSD_PROXY_REPLICAS)/g;s@{{ADDITIONAL_YAML}}@$(STATSD_PROXY_ADDITIONAL_YAML)@g' kube/$(STATSD_PROXY_DIR_NAME)/dep.yml
 endef
 
 deploy-statsd-proxy: docker-statsd-proxy
@@ -31,6 +32,7 @@ STATSD_DAEMON_DOCKER_DIR=docker/$(STATSD_DAEMON_DIR_NAME)
 STATSD_DAEMON_IMAGE_TAG=$(shell git log -n 1 --pretty=format:%h $(STATSD_DAEMON_DOCKER_DIR))
 STATSD_DAEMON_IMAGE_NAME=$(DOCKER_REPOSITORY)/$(STATSD_DAEMON_APP_NAME):$(STATSD_DAEMON_IMAGE_TAG)
 STATSD_DAEMON_REPLICAS?=$(shell curl -s config/$(NANIT_ENV)/$(STATSD_DAEMON_APP_NAME)/replicas)
+STATSD_DAEMON_ADDITIONAL_YAML?=$(shell curl -s config/$(NANIT_ENV)/$(STATSD_DAEMON_APP_NAME)/additional_yaml)
 
 define generate-statsd-daemon-svc
 	sed -e 's/{{APP_NAME}}/$(STATSD_DAEMON_APP_NAME)/g' kube/$(STATSD_DAEMON_DIR_NAME)/svc.yml
@@ -38,7 +40,7 @@ endef
 
 define generate-statsd-daemon-dep
 	if [ -z "$(STATSD_DAEMON_REPLICAS)" ]; then echo "ERROR: STATSD_DAEMON_REPLICAS is empty!"; exit 1; fi
-	sed -e 's/{{APP_NAME}}/$(STATSD_DAEMON_APP_NAME)/g;s,{{IMAGE_NAME}},$(STATSD_DAEMON_IMAGE_NAME),g;s/{{REPLICAS}}/$(STATSD_DAEMON_REPLICAS)/g' kube/$(STATSD_DAEMON_DIR_NAME)/dep.yml
+	sed -e 's/{{APP_NAME}}/$(STATSD_DAEMON_APP_NAME)/g;s,{{IMAGE_NAME}},$(STATSD_DAEMON_IMAGE_NAME),g;s/{{REPLICAS}}/$(STATSD_DAEMON_REPLICAS)/g;s@{{ADDITIONAL_YAML}}@$(STATSD_DAEMON_ADDITIONAL_YAML)@g' kube/$(STATSD_DAEMON_DIR_NAME)/dep.yml
 endef
 
 deploy-statsd-daemon: docker-statsd-daemon
@@ -55,6 +57,7 @@ CARBON_RELAY_DOCKER_DIR=docker/$(CARBON_RELAY_DIR_NAME)
 CARBON_RELAY_IMAGE_TAG=$(shell git log -n 1 --pretty=format:%h $(CARBON_RELAY_DOCKER_DIR))
 CARBON_RELAY_IMAGE_NAME=$(DOCKER_REPOSITORY)/$(CARBON_RELAY_APP_NAME):$(CARBON_RELAY_IMAGE_TAG)
 CARBON_RELAY_REPLICAS?=$(shell curl -s config/$(NANIT_ENV)/$(CARBON_RELAY_APP_NAME)/replicas)
+CARBON_RELAY_ADDITIONAL_YAML?=$(shell curl -s config/$(NANIT_ENV)/$(CARBON_RELAY_APP_NAME)/additional_yaml)
 
 define generate-carbon-relay-svc
 	sed -e 's/{{APP_NAME}}/$(CARBON_RELAY_APP_NAME)/g' kube/$(CARBON_RELAY_DIR_NAME)/svc.yml
@@ -62,7 +65,7 @@ endef
 
 define generate-carbon-relay-dep
 	if [ -z "$(CARBON_RELAY_REPLICAS)" ]; then echo "ERROR: CARBON_RELAY_REPLICAS is empty!"; exit 1; fi
-	sed -e 's/{{APP_NAME}}/$(CARBON_RELAY_APP_NAME)/g;s,{{IMAGE_NAME}},$(CARBON_RELAY_IMAGE_NAME),g;s/{{REPLICAS}}/$(CARBON_RELAY_REPLICAS)/g' kube/$(CARBON_RELAY_DIR_NAME)/dep.yml
+	sed -e 's/{{APP_NAME}}/$(CARBON_RELAY_APP_NAME)/g;s,{{IMAGE_NAME}},$(CARBON_RELAY_IMAGE_NAME),g;s/{{REPLICAS}}/$(CARBON_RELAY_REPLICAS)/g;s@{{ADDITIONAL_YAML}}@$(CARBON_RELAY_ADDITIONAL_YAML)@g' kube/$(CARBON_RELAY_DIR_NAME)/dep.yml
 endef
 
 deploy-carbon-relay: docker-carbon-relay
@@ -82,6 +85,7 @@ GRAPHITE_NODE_REPLICAS?=$(shell curl -s config/$(NANIT_ENV)/$(GRAPHITE_NODE_APP_
 GRAPHITE_NODE_DISK_SIZE?=$(shell curl -s config/$(NANIT_ENV)/$(GRAPHITE_NODE_APP_NAME)/disk_size)
 GRAPHITE_NODE_CURATOR_RETENTION?=$(shell curl -s config/$(NANIT_ENV)/$(GRAPHITE_NODE_APP_NAME)/curator_retention)
 GRAPHITE_NODE_STORAGE_CLASS?=$(shell curl -s config/$(NANIT_ENV)/$(GRAPHITE_NODE_APP_NAME)/storage_class)
+GRAPHITE_NODE_ADDITIONAL_YAML?=$(shell curl -s config/$(NANIT_ENV)/$(GRAPHITE_NODE_APP_NAME)/additional_yaml)
 
 define generate-graphite-node-svc
 	sed -e 's/{{APP_NAME}}/$(GRAPHITE_NODE_APP_NAME)/g' kube/$(GRAPHITE_NODE_DIR_NAME)/svc.yml
@@ -91,7 +95,7 @@ define generate-graphite-node-dep
 	if [ -z "$(GRAPHITE_NODE_REPLICAS)" ]; then echo "ERROR: GRAPHITE_NODE_REPLICAS is empty!"; exit 1; fi
 	if [ -z "$(GRAPHITE_NODE_DISK_SIZE)" ]; then echo "ERROR: GRAPHITE_NODE_DISK_SIZE is empty!"; exit 1; fi
 	if [ -z "$(GRAPHITE_NODE_STORAGE_CLASS)" ]; then echo "ERROR: GRAPHITE_NODE_STORAGE_CLASS is empty!"; exit 1; fi
-	sed -e 's/{{APP_NAME}}/$(GRAPHITE_NODE_APP_NAME)/g;s,{{STORAGE_CLASS}},$(GRAPHITE_NODE_STORAGE_CLASS),g;s,{{IMAGE_NAME}},$(GRAPHITE_NODE_IMAGE_NAME),g;s/{{REPLICAS}}/$(GRAPHITE_NODE_REPLICAS)/g;s/{{CURATOR_RETENTION}}/$(GRAPHITE_NODE_CURATOR_RETENTION)/g;s/{{DISK_SIZE}}/$(GRAPHITE_NODE_DISK_SIZE)/g' kube/$(GRAPHITE_NODE_DIR_NAME)/stateful.set.yml
+	sed -e 's/{{APP_NAME}}/$(GRAPHITE_NODE_APP_NAME)/g;s,{{STORAGE_CLASS}},$(GRAPHITE_NODE_STORAGE_CLASS),g;s,{{IMAGE_NAME}},$(GRAPHITE_NODE_IMAGE_NAME),g;s/{{REPLICAS}}/$(GRAPHITE_NODE_REPLICAS)/g;s/{{CURATOR_RETENTION}}/$(GRAPHITE_NODE_CURATOR_RETENTION)/g;s/{{DISK_SIZE}}/$(GRAPHITE_NODE_DISK_SIZE)/g;s@{{ADDITIONAL_YAML}}@$(GRAPHITE_NODE_ADDITIONAL_YAML)@g' kube/$(GRAPHITE_NODE_DIR_NAME)/stateful.set.yml
 endef
 
 deploy-graphite-node: docker-graphite-node

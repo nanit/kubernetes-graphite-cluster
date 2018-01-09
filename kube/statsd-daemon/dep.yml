@@ -24,3 +24,4 @@ spec:
           - containerPort: 8126
             name: admin
             protocol: TCP
+      {{ADDITIONAL_YAML}}
