@@ -17,3 +17,4 @@ spec:
           - containerPort: 2003
             name: incoming
             protocol: TCP
+      {{ADDITIONAL_YAML}}

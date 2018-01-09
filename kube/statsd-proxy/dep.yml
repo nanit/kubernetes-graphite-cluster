@@ -15,9 +15,10 @@ spec:
           image: {{IMAGE_NAME}}
           resources:
             requests:
-              cpu: 500m
+              cpu: 600m
               memory: 256Mi
           ports:
           - containerPort: 8125
             name: incoming-udp
             protocol: UDP
+      {{ADDITIONAL_YAML}}

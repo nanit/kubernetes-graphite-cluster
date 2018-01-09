@@ -22,7 +22,7 @@ spec:
         resources:
           requests:
             cpu: 700m
-            memory: 6Gi
+            memory: 7Gi
         ports:
         - containerPort: 80
           name: http
@@ -33,6 +33,7 @@ spec:
         volumeMounts:
         - name: graphite-node-pv
           mountPath: /opt/graphite/storage/whisper
+      {{ADDITIONAL_YAML}}
   volumeClaimTemplates:
   - metadata:
       name: graphite-node-pv
