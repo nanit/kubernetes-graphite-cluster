@@ -25,6 +25,9 @@ deploy-statsd-proxy: docker-statsd-proxy
 docker-statsd-proxy:
 	$(SUDO) docker pull $(STATSD_PROXY_IMAGE_NAME) || ($(SUDO) docker build -t $(STATSD_PROXY_IMAGE_NAME) $(STATSD_PROXY_DOCKER_DIR) && $(SUDO) docker push $(STATSD_PROXY_IMAGE_NAME))
 
+clean-statsd-proxy:
+	kubectl delete deployment $(STATSD_PROXY_APP_NAME)
+
 #-------------------------------------------------------------------------------------------------------------------------------------------------
 STATSD_DAEMON_APP_NAME=statsd-daemon
 STATSD_DAEMON_DIR_NAME=statsd-daemon
@@ -50,6 +53,9 @@ deploy-statsd-daemon: docker-statsd-daemon
 docker-statsd-daemon:
 	$(SUDO) docker pull $(STATSD_DAEMON_IMAGE_NAME) || ($(SUDO) docker build -t $(STATSD_DAEMON_IMAGE_NAME) $(STATSD_DAEMON_DOCKER_DIR) && $(SUDO) docker push $(STATSD_DAEMON_IMAGE_NAME))
 
+clean-statsd-daemon:
+	kubectl delete deployment $(STATSD_DAEMON_APP_NAME)
+
 #-------------------------------------------------------------------------------------------------------------------------------------------------
 CARBON_RELAY_APP_NAME=carbon-relay
 CARBON_RELAY_DIR_NAME=carbon-relay
@@ -74,6 +80,9 @@ deploy-carbon-relay: docker-carbon-relay
 
 docker-carbon-relay:
 	$(SUDO) docker pull $(CARBON_RELAY_IMAGE_NAME) || ($(SUDO) docker build -t $(CARBON_RELAY_IMAGE_NAME) $(CARBON_RELAY_DOCKER_DIR) && $(SUDO) docker push $(CARBON_RELAY_IMAGE_NAME))
+
+clean-carbon-relay:
+	kubectl delete deployment $(CARBON_RELAY_APP_NAME)
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------
 GRAPHITE_NODE_APP_NAME=graphite-node
@@ -105,6 +114,10 @@ deploy-graphite-node: docker-graphite-node
 docker-graphite-node:
 	$(SUDO) docker pull $(GRAPHITE_NODE_IMAGE_NAME) || ($(SUDO) docker build -t $(GRAPHITE_NODE_IMAGE_NAME) $(GRAPHITE_NODE_DOCKER_DIR) && $(SUDO) docker push $(GRAPHITE_NODE_IMAGE_NAME))
 
+clean-graphite-node:
+	kubectl delete statefulset $(GRAPHITE_NODE_APP_NAME)
+	kubectl delete pvc -l app=$(GRAPHITE_NODE_APP_NAME)
+
 #-------------------------------------------------------------------------------------------------------------------------------------------------
 GRAPHITE_MASTER_APP_NAME=graphite
 GRAPHITE_MASTER_DIR_NAME=graphite-master
@@ -129,5 +142,10 @@ deploy-graphite-master: docker-graphite-master
 docker-graphite-master:
 	$(SUDO) docker pull $(GRAPHITE_MASTER_IMAGE_NAME) || ($(SUDO) docker build -t $(GRAPHITE_MASTER_IMAGE_NAME) $(GRAPHITE_MASTER_DOCKER_DIR) && $(SUDO) docker push $(GRAPHITE_MASTER_IMAGE_NAME))
 
+clean-graphite-master:
+	kubectl delete deployment $(GRAPHITE_MASTER_APP_NAME)
+
 
 deploy: deploy-graphite-node deploy-statsd-daemon deploy-statsd-proxy deploy-carbon-relay deploy-graphite-master
+
+clean: clean-statsd-proxy clean-statsd-daemon-clean-carbon-relay-clean-graphite-node clean-graphite-master
