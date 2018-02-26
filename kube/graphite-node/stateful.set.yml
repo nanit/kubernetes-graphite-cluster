@@ -22,7 +22,7 @@ spec:
         resources:
           requests:
             cpu: 700m
-            memory: 7Gi
+            memory: 6Gi
         ports:
         - containerPort: 80
           name: http
