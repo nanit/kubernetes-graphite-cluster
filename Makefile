@@ -149,3 +149,12 @@ clean-graphite-master:
 deploy: deploy-graphite-node deploy-statsd-daemon deploy-statsd-proxy deploy-carbon-relay deploy-graphite-master
 
 clean: clean-statsd-proxy clean-statsd-daemon clean-carbon-relay clean-graphite-node clean-graphite-master
+
+verify-statsd:
+	kubectl exec $(name) -- cat proxyConfig.js | grep host
+
+verify-carbon:
+	kubectl exec $(name) -- cat /opt/graphite/conf/carbon.conf | grep DESTINATIONS
+
+verify-graphite:
+	kubectl exec $(name) -- cat /opt/graphite/webapp/graphite/local_settings.py | grep CLUSTER_SERVERS
