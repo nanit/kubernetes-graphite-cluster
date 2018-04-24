@@ -15,6 +15,9 @@ spec:
           image: {{IMAGE_NAME}}
           ports:
           - containerPort: 2003
-            name: incoming
+            name: plaintext
+            protocol: TCP
+          - containerPort: 2004
+            name: pickle
             protocol: TCP
       {{ADDITIONAL_YAML}}

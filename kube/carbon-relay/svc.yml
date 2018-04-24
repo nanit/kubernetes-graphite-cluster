@@ -7,6 +7,10 @@ spec:
     app: {{APP_NAME}}
   ports:
   - port: 2003
-    name: incoming
+    name: plaintext
     targetPort: 2003
+    protocol: TCP
+  - port: 2004
+    name: pickle
+    targetPort: 2004
     protocol: TCP

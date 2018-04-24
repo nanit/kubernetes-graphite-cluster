@@ -83,6 +83,7 @@ docker-carbon-relay:
 
 clean-carbon-relay:
 	kubectl delete deployment $(CARBON_RELAY_APP_NAME) || true
+	kubectl delete svc $(CARBON_RELAY_APP_NAME) || true
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------
 GRAPHITE_NODE_APP_NAME=graphite-node

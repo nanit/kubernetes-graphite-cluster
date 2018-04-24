@@ -123,8 +123,10 @@ Optional Variables:
   servers: [ {server: "./servers/udp", port: 8125} ], 
   backends: [ "./backends/graphite" ],
   graphiteHost: "carbon-relay",
+  graphiteProtocol: "pickle",
   graphitePort: 2003,
-  flushInterval: 5000,
+  graphitePicklePort: 2004, 
+  flushInterval: 20000,
   deleteIdleStats: true,
   graphite:
   {
