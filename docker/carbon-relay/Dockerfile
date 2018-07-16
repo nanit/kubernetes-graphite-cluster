@@ -25,7 +25,7 @@ add conf/storage-schemas.conf /opt/graphite/conf/storage-schemas.conf
 add	./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 RUN mkdir /kube-watch
-RUN cd /kube-watch && npm install hashring kubernetes-client json-stream
+RUN cd /kube-watch && npm install hashring kubernetes-client@4.0.1 json-stream
 add kube-watch.js /kube-watch/kube-watch.js
 
 EXPOSE 2003
