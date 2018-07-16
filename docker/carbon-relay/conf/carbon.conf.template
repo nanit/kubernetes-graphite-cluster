@@ -26,7 +26,7 @@ RELAY_METHOD = consistent-hashing
 
 # If you use consistent-hashing you can add redundancy by replicating every
 # datapoint to more than one machine.
-REPLICATION_FACTOR = 2
+REPLICATION_FACTOR = 1
 
 # For REPLICATION_FACTOR >=2, set DIVERSE_REPLICAS to True to guarantee replicas
 # across distributed hosts. With this setting disabled, it's possible that replicas
@@ -58,13 +58,13 @@ DESTINATIONS = @@GRAPHITE_NODES@@
 # for a single destination. Once this limit is hit, we will
 # stop accepting new data if USE_FLOW_CONTROL is True, otherwise
 # we will drop any subsequently received datapoints.
-MAX_QUEUE_SIZE = 10000
+MAX_QUEUE_SIZE = 100000
 
 # This defines the maximum "message size" between carbon daemons.  If
 # your queue is large, setting this to a lower number will cause the
 # relay to forward smaller discrete chunks of stats, which may prevent
 # overloading on the receiving side after a disconnect.
-MAX_DATAPOINTS_PER_MESSAGE = 500
+MAX_DATAPOINTS_PER_MESSAGE = 5000
 
 # Limit the number of open connections the receiver can handle as any time.
 # Default is no limit. Setting up a limit for sites handling high volume
