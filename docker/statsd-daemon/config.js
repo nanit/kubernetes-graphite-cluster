@@ -126,7 +126,7 @@ Optional Variables:
   graphiteProtocol: "pickle",
   graphitePort: 2003,
   graphitePicklePort: 2004, 
-  flushInterval: 20000,
+  flushInterval: 5000,
   deleteIdleStats: true,
   graphite:
   {
