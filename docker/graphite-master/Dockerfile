@@ -50,7 +50,7 @@ run	chmod 0664 /opt/graphite/storage/graphite.db
 run cp /src/graphite-web/webapp/manage.py /opt/graphite/webapp
 
 RUN mkdir /kube-watch
-RUN cd /kube-watch && npm install hashring kubernetes-client@3.18.1 json-stream
+RUN cd /kube-watch && npm install hashring kubernetes-client@5 json-stream
 add kube-watch.js /kube-watch/kube-watch.js
 
 add entrypoint.sh /entrypoint.sh

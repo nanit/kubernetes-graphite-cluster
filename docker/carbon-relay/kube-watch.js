@@ -1,43 +1,53 @@
-const util = require('util');
-const fs = require('fs')
-const Api = require('kubernetes-client');
-const kube = new Api.Core(Api.config.getInCluster());
+const fs = require('fs');
+const Client = require('kubernetes-client').Client;
+const config = require('kubernetes-client').config;
+const client = new Client({ config: config.getInCluster() });
 const JSONStream = require('json-stream');
 const jsonStream = new JSONStream();
 const configFileTemplate="/opt/graphite/conf/carbon.conf.template";
 const configFileTarget="/opt/graphite/conf/carbon.conf";
-const processToRestart="carbon-relay"
+const processToRestart="carbon-relay";
 const configTemplate = fs.readFileSync(configFileTemplate, 'utf8');
 const exec = require('child_process').exec;
+const namespace = fs.readFileSync('/var/run/secrets/kubernetes.io/serviceaccount/namespace', 'utf8').toString();
 
 function restartProcess() {
   exec(`supervisorctl restart ${processToRestart}`, (error, stdout, stderr) => {
-    console.log(`out: ${stdout}
-      err: ${stderr}`)})
+    if (error) {
+      console.error(error);
+      return;
+    }
+    console.log(stdout);
+    console.error(stderr);
+  });
 }
 
 function getNodes(endpoints) {
-  if (endpoints.subsets.length > 0) {
-    return endpoints.subsets[0].addresses.map(e => (e.ip + ":2004")).join(",");
-  } else {
-    return "";
-  }
+  return endpoints.subsets ? endpoints.subsets[0].addresses.map(e => `${e.ip}:2004`).join(",") : "";
 }
 
 function changeConfig(endpoints) {
   var result = configTemplate.replace(/@@GRAPHITE_NODES@@/g, getNodes(endpoints));
   fs.writeFileSync(configFileTarget, result);
-  restartProcess()
+  restartProcess();
 }
 
-kube.ns.endpoints.get('graphite-node', function(err, result) {
-  console.log(JSON.stringify(result))
-  changeConfig(result)
-})
+async function main() {
+  await client.loadSpec();
+  const stream = client.apis.v1.ns(namespace).endpoints.getStream({ qs: { watch: true, fieldSelector: 'metadata.name=graphite-node' } });
+  stream.pipe(jsonStream);
+  jsonStream.on('data', obj => {
+    if (!obj) {
+      return;
+    }
+    console.log('Received update:', JSON.stringify(obj));
+    changeConfig(obj.object);
+  });
+}
 
-const stream = kube.endpoints.get({qs: {watch: true, fieldSelector: 'metadata.name=graphite-node'}})
-stream.pipe(jsonStream);
-jsonStream.on('data', obj => {
-  console.log('Received update:', JSON.stringify(obj, null, 2));
-  changeConfig(obj.object);
-});
+try {
+  main();
+} catch (error) {
+  console.error(error);
+  process.exit(1);
+}
