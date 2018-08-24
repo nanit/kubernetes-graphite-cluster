@@ -29,6 +29,10 @@ RUN     git clone https://github.com/graphite-project/graphite-web.git /src/grap
         pip install -r requirements.txt                                                   &&\
         python check-dependencies.py
 
+# fixes fatal error "Your WhiteNoise configuration is incompatible with WhiteNoise v4.0"
+RUN     /usr/bin/yes | pip uninstall whitenoise                                           &&\
+        pip install "whitenoise<4"
+
 # Add system service config
 add	./nginx/nginx.conf /etc/nginx/nginx.conf
 add	./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
