@@ -136,6 +136,16 @@ define generate-graphite-master-dep
 	sed -e 's/{{APP_NAME}}/$(GRAPHITE_MASTER_APP_NAME)/g;s,{{IMAGE_NAME}},$(GRAPHITE_MASTER_IMAGE_NAME),g;s/{{REPLICAS}}/$(GRAPHITE_MASTER_REPLICAS)/g' kube/$(GRAPHITE_MASTER_DIR_NAME)/dep.yml
 endef
 
+deploy-rbac:
+	kubectl apply -f kube/rbac/serviceaccount.yml
+	kubectl apply -f kube/rbac/role.yml
+	kubectl apply -f kube/rbac/role-binding.yml
+
+clean-rbac:
+	kubectl delete serviceaccount graphite-cluster-sa || true
+	kubectl delete rolebinding read-endpoints || true
+	kubectl delete role endpoints-reader || true
+
 deploy-graphite-master: docker-graphite-master
 	kubectl get svc $(GRAPHITE_MASTER_APP_NAME) || $(call generate-graphite-master-svc) | kubectl create -f -
 	$(call generate-graphite-master-dep) | kubectl apply -f -
@@ -147,9 +157,9 @@ clean-graphite-master:
 	kubectl delete deployment $(GRAPHITE_MASTER_APP_NAME) || true
 
 
-deploy: deploy-graphite-node deploy-statsd-daemon deploy-statsd-proxy deploy-carbon-relay deploy-graphite-master
+deploy: deploy-rbac deploy-graphite-node deploy-statsd-daemon deploy-statsd-proxy deploy-carbon-relay deploy-graphite-master
 
-clean: clean-statsd-proxy clean-statsd-daemon clean-carbon-relay clean-graphite-node clean-graphite-master
+clean: clean-statsd-proxy clean-statsd-daemon clean-carbon-relay clean-graphite-node clean-graphite-master clean-rbac
 
 verify-statsd:
 	kubectl exec $(name) -- cat proxyConfig.js | grep host
