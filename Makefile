@@ -148,11 +148,13 @@ define generate-rbac-rolebinding
 endef
 
 deploy-rbac:
+	if [ -z "$(RBAC_API_VERSION)" ]; then exit 1; fi
 	kubectl apply -f kube/rbac/serviceaccount.yml
 	$(call generate-rbac-role) | kubectl apply -f -
 	$(call generate-rbac-rolebinding) | kubectl apply -f -
 
 clean-rbac:
+	if [ -z "$(RBAC_API_VERSION)" ]; then exit 1; fi
 	kubectl delete serviceaccount graphite-cluster-sa || true
 	kubectl delete rolebinding read-endpoints || true
 	kubectl delete role endpoints-reader || true
