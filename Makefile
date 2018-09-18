@@ -136,10 +136,21 @@ define generate-graphite-master-dep
 	sed -e 's/{{APP_NAME}}/$(GRAPHITE_MASTER_APP_NAME)/g;s,{{IMAGE_NAME}},$(GRAPHITE_MASTER_IMAGE_NAME),g;s/{{REPLICAS}}/$(GRAPHITE_MASTER_REPLICAS)/g' kube/$(GRAPHITE_MASTER_DIR_NAME)/dep.yml
 endef
 
+RBAC_DIR_NAME=rbac
+RBAC_API_VERSION=$(shell (kubectl api-versions | grep rbac. | grep -sE v1$$) || (kubectl api-versions | grep rbac. | grep -sE v1beta1$$) || (kubectl api-versions | grep rbac. | grep -sE v1alpha1$$) || echo "")
+
+define generate-rbac-role
+	sed -e 's;{{RBAC_API_VERSION}};$(RBAC_API_VERSION);g' kube/$(RBAC_DIR_NAME)/role.yml
+endef
+
+define generate-rbac-rolebinding
+	sed -e 's;{{RBAC_API_VERSION}};$(RBAC_API_VERSION);g' kube/$(RBAC_DIR_NAME)/role-binding.yml
+endef
+
 deploy-rbac:
 	kubectl apply -f kube/rbac/serviceaccount.yml
-	kubectl apply -f kube/rbac/role.yml
-	kubectl apply -f kube/rbac/role-binding.yml
+	$(call generate-rbac-role) | kubectl apply -f -
+	$(call generate-rbac-rolebinding) | kubectl apply -f -
 
 clean-rbac:
 	kubectl delete serviceaccount graphite-cluster-sa || true
