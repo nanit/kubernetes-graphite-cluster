@@ -1,17 +1,15 @@
-const Api = require('kubernetes-client');
+const fs = require('fs');
+const util = require('util');
+const Client = require('kubernetes-client').Client;
+const config = require('kubernetes-client').config;
+const client = new Client({ config: config.getInCluster() });
 const JSONStream = require('json-stream');
 const jsonStream = new JSONStream();
-const util = require('util');
-const fs = require('fs')
-const configFilePath="./proxyConfig.js"
-const core = new Api.Core(Api.config.getInCluster());
+const configFilePath = "./proxyConfig.js"
+const namespace = fs.readFileSync('/var/run/secrets/kubernetes.io/serviceaccount/namespace', 'utf8').toString();
 
 function getNodes(endpoints) {
-  if (endpoints.subsets.length > 0) {
-    return endpoints.subsets[0].addresses.map(e => ({host: e.ip, port: 8125, adminport: 8126}));
-  } else {
-    return [];
-  }
+  return endpoints.subsets ? endpoints.subsets[0].addresses.map(e => ({ host: e.ip, port: 8125, adminport: 8126 })) : [];
 }
 
 function changeConfig(endpoints) {
@@ -21,16 +19,22 @@ function changeConfig(endpoints) {
   fs.writeFileSync(configFilePath, util.inspect(currentConfig));
 }
 
-core.ns.endpoints.get('statsd-daemon', function(err, result) {
-  console.log(JSON.stringify(result))
-  console.log(result.subsets.length)
-  // changeConfig(result)
-})
+async function main() {
+  await client.loadSpec();
+  const stream = client.apis.v1.ns(namespace).endpoints.getStream({ qs: { watch: true, fieldSelector: 'metadata.name=statsd-daemon' } });
+  stream.pipe(jsonStream);
+  jsonStream.on('data', obj => {
+    if (!obj) {
+      return;
+    }
+    console.log('Received update:', JSON.stringify(obj));
+    changeConfig(obj.object);
+  });
+}
 
-const stream = core.endpoints.get({qs: {watch: true, fieldSelector: 'metadata.name=statsd-daemon'}})
-stream.pipe(jsonStream);
-jsonStream.on('data', obj => {
-  console.log('Received update:', JSON.stringify(obj, null, 2));
-  changeConfig(obj.object);
-});
-
+try {
+  main();
+} catch (error) {
+  console.error(error);
+  process.exit(1);
+}

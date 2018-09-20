@@ -5,7 +5,7 @@ WORKDIR /app
 RUN git clone https://github.com/etsy/statsd.git
 WORKDIR /app/statsd
 RUN npm install -g forever
-RUN npm install hashring kubernetes-client@3.18.1 json-stream --save
+RUN npm install hashring kubernetes-client@5 json-stream --save
 COPY * ./
 
 EXPOSE 8125/udp 8126

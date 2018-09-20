@@ -21,4 +21,5 @@ spec:
           - containerPort: 8125
             name: incoming-udp
             protocol: UDP
+      serviceAccountName: graphite-cluster-sa
       {{ADDITIONAL_YAML}}

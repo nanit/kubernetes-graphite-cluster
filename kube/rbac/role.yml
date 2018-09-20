@@ -1,0 +1,8 @@
+apiVersion: {{RBAC_API_VERSION}}
+kind: Role
+metadata:
+  name: endpoints-reader
+rules:
+- apiGroups: [""]
+  resources: ["endpoints"]
+  verbs: ["get", "watch", "list"]

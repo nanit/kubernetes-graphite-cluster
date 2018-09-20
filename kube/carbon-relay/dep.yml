@@ -20,4 +20,5 @@ spec:
           - containerPort: 2004
             name: pickle
             protocol: TCP
+      serviceAccountName: graphite-cluster-sa
       {{ADDITIONAL_YAML}}

@@ -29,6 +29,10 @@ RUN     git clone https://github.com/graphite-project/graphite-web.git /src/grap
         pip install -r requirements.txt                                                   &&\
         python check-dependencies.py
 
+# fixes fatal error "Your WhiteNoise configuration is incompatible with WhiteNoise v4.0"
+RUN     /usr/bin/yes | pip uninstall whitenoise                                           &&\
+        pip install "whitenoise<4"
+
 # Add system service config
 add	./nginx/nginx.conf /etc/nginx/nginx.conf
 add	./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -46,7 +50,7 @@ run	chmod 0664 /opt/graphite/storage/graphite.db
 run cp /src/graphite-web/webapp/manage.py /opt/graphite/webapp
 
 RUN mkdir /kube-watch
-RUN cd /kube-watch && npm install hashring kubernetes-client@3.18.1 json-stream
+RUN cd /kube-watch && npm install hashring kubernetes-client@5 json-stream
 add kube-watch.js /kube-watch/kube-watch.js
 
 add entrypoint.sh /entrypoint.sh

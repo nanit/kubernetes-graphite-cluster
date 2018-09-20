@@ -1,0 +1,11 @@
+apiVersion: {{RBAC_API_VERSION}}
+kind: RoleBinding
+metadata:
+  name: read-endpoints
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: endpoints-reader
+subjects:
+- kind: ServiceAccount
+  name: graphite-cluster-sa
